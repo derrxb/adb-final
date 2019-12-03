@@ -1,7 +1,7 @@
 ## Project overview
 
-A Flask web application for a MOOCs social network (not really sure
-if this is what we're really doing).
+A MOOCs social network (not really sure if this is what we're doing) built
+with Flask.
 
 ## Requirements
 
@@ -29,7 +29,7 @@ pip install -r requirements.txt
 * Start graph server
 
 ##### Step 4: Seed the database with the project data
-* This is a work in progres. We're still figuring it out.
+* This is a work in progress. We're still figuring it out.
 
 ##### Step 3: Start Flask server
 * run.py launches the Flask server
