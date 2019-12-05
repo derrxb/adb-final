@@ -32,8 +32,11 @@ pip install -r requirements.txt
 * This is a work in progress. We're still figuring it out.
 
 ##### Step 3: Start Flask server
-* run.py launches the Flask server
+* To start the Flask app, run the command below:
 
 ```
-python run.py
+FLASK_APP=runserver.py flask run
 ```
+
+Not sure why but for some reason `python runserver.py` fails to launch the app. So if you can't get the app to run
+it might be because you are running this command. (I tried like a billion times).
