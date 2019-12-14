@@ -1,6 +1,5 @@
 import json
 from neo4j import GraphDatabase, basic_auth
-from pprint import pprint
 
 file = open('data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
@@ -16,21 +15,12 @@ def add_weekSection(driver):
     # Create session
     session = driver.session()
 
-    # Get
+    # Get weekly data
     weekList = []
     for courseId, courseItem in data['WeekSection'].items():
-        if courseItem is None:
-            weekData = {
-              'course_id':courseId,
-              'week_num':None,
-              'week_name':None,
-              'week_description':None,
-              'week_timeCommitment':None,
-              'week_id':None,
-              'week_slug':None
-              }
-            weekList.append(weekData)
-        elif type(courseItem[0]) == str:
+        if courseItem is None: # Courses that has no weekly information
+            continue
+        elif type(courseItem[0]) == str: # Courses that only have week names
             for weekNum, weekItem in enumerate(courseItem,1):
                 weekData = {
                     'course_id':courseId,
@@ -41,7 +31,7 @@ def add_weekSection(driver):
                     'week_id':None,
                     'week_slug':None
                     }
-        elif 'name' in courseItem[0].keys():
+        elif 'name' in courseItem[0].keys(): # Coursera courses
             for weekNum, weekItem in enumerate(courseItem,1):
                 weekData = {
                     'course_id':courseId,
@@ -53,7 +43,7 @@ def add_weekSection(driver):
                     'week_slug':weekItem['slug']
                     }
                 weekList.append(weekData)
-        elif 'sectionTitle' in courseItem[0].keys():
+        elif 'sectionTitle' in courseItem[0].keys(): # eWant courses
             for weekNum, weekItem in enumerate(courseItem,1):
                 if type(weekItem['sectionDetail']) == str:
                     weekData = {
@@ -66,7 +56,7 @@ def add_weekSection(driver):
                         'week_slug':None
                         }
                     weekList.append(weekData)
-                else:
+                else: # eWant courses with descriptions in list form (multiple contents in a week)
                     weekData = {
                         'course_id':courseId,
                         'week_num':weekNum,
@@ -78,9 +68,7 @@ def add_weekSection(driver):
                         }
                     weekList.append(weekData)
     
-    # Create language nodes
-    
-#    for language in languages:
+    # Load dictionary to neo4j
     for dicts in weekList:
         session.run('CREATE (w:weekSection) SET w = {dict_param}', parameters={'dict_param':dicts})
     session.close()
@@ -88,7 +76,5 @@ def add_weekSection(driver):
     return weekList
 
 
-# print('Weeks added were: ', add_weekSection(driver))
-    
-#pprint(add_weekSection(driver))
-print(add_weekSection(driver)[0]['week_name'])
+add_weekSection(driver)
+print('Weekly data addeed.')
