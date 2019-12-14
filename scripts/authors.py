@@ -14,28 +14,32 @@ driver = GraphDatabase.driver('bolt://localhost:7687',
 
 def add_author(driver):
     session = driver.session()
+    allauthors = []
+    for courseId, authors in data['Author'].items():
+    
+        if type(authors)is list:
+            for person in authors:
+                author = {
+                'course_id': courseId,
+                'author': person
+                }
+                #print (author['course_id'], author['author'])
+                allauthors.append(author)
+        else:
+            if authors != "":
+                author = {
+                    'course_id': courseId,
+                    'author': authors
+                }
+            #print (author['course_id'], author['author'])
+            allauthors.append(author)
 
-    # get unique author tags
-    author = data['Author'].values()
-
-    tags = set()
-
-    for lists in author:
-        for word in lists:
-            if word != "":
-                tags.add(word)
-
-    tags = list(tags)
-    print(tags)
-    print(len(tags))
-
-    # add tags
-    for tag in tags:
-        session.run(
-            'CREATE (a:author {author: $author }) RETURN a', author=tag)
-
+    # Load dictionary to neo4j
+    for dicts in allauthors:
+        session.run('CREATE (a:Author) SET a = {dict_param}', parameters={'dict_param':dicts})
+    
     session.close()
+    
+    return allauthors
 
-    return tags
-
-# print("Author added:", add_author(driver))
+print("Authors added",add_author(driver))
