@@ -1,6 +1,6 @@
 import json
 
-file = open('data/adb_courses.json', "rb", buffering=0)
+file = open('../data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
 
 
@@ -34,4 +34,6 @@ def get_course(id):
     return f"\n{course_title} ({course_provider})\n\n{course_prof}\n\n{course_description}\n\n{course_knowledge}"
 
 
-print(get_course(5))
+print(get_course(6))
+
+#print()

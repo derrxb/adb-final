@@ -21,12 +21,17 @@ def add_language(driver):
 
     # Create language nodes
     for language in languages:
-        session.run(
-            'CREATE (l:Language {language: $language }) RETURN l', language=language)
+        if language in languages:
+            print('Language already existed')
+            break
+        else:    
+            session.run('CREATE (l:Language {language: $language }) RETURN l', language=language)
+            print('Languages added were: ', add_language(driver))
 
     session.close()
 
     return languages
 
+print('Current languages: ', add_language(driver))
 
-print('Languages added were: ', add_language(driver))
+
