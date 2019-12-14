@@ -2,7 +2,7 @@ import json
 from neo4j import GraphDatabase, basic_auth
 
 # Load and parse data
-file = open('data/adb_courses.json', "rb", buffering=0)
+file = open('../data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
 
 
@@ -14,24 +14,27 @@ driver = GraphDatabase.driver('bolt://localhost:7687',
 
 def add_knowledge(driver):
     session = driver.session()
-    alltags = []
-    for courseId, tags in data['Knowledge'].items():
 
-        for tag in tags:
-            tag = {
-            'course_id': courseId,
-            'knowledge': tag
-            }
-            
-            alltags.append(tag)
-       
+    # get unique knowledge tags
+    knowledge =  data['Knowledge'].values()
 
-    # Load dictionary to neo4j
-    for dicts in alltags:
-        session.run('CREATE (k:Knowledge) SET k = {dict_param}', parameters={'dict_param':dicts})
-    
+    tags = set()
+
+    for lists in knowledge:
+        for word in lists:
+            tags.add(word)
+
+    tags = list(tags)
+    # print(tags)
+    # print(len(tags))
+
+    # add tags
+    for tag in tags:
+        session.run(
+            'CREATE (k:Knowledge {knowledge: $knowledge }) RETURN k', knowledge=tag)
+
     session.close()
-    
-    return alltags
 
-print("Knowledge added",add_knowledge(driver))
+    return len(tags)
+
+print("Knowledge added:", add_knowledge(driver))
