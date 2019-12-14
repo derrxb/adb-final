@@ -2,7 +2,7 @@ import json
 from neo4j import GraphDatabase, basic_auth
 
 # Load and parse data
-file = open('../data/adb_courses.json', "rb", buffering=0)
+file = open('data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
 
 
@@ -16,7 +16,7 @@ def add_knowledge(driver):
     session = driver.session()
 
     # get unique knowledge tags
-    knowledge =  data['Knowledge'].values()
+    knowledge = data['Knowledge'].values()
 
     tags = set()
 
@@ -36,5 +36,6 @@ def add_knowledge(driver):
     session.close()
 
     return tags
+
 
 print("Knowledge added:", add_knowledge(driver))

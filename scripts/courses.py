@@ -30,7 +30,3 @@ def add_course(driver, course_id):
     result = session.run('CREATE (c:Course $course) RETURN c', course=course)
 
     return result.single()
-
-
-# Run to see it in action
-# add_course(driver, '300')

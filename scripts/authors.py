@@ -2,7 +2,7 @@ import json
 from neo4j import GraphDatabase, basic_auth
 
 # Load and parse data
-file = open('../data/adb_courses.json', "rb", buffering=0)
+file = open('data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
 
 
@@ -16,7 +16,7 @@ def add_author(driver):
     session = driver.session()
 
     # get unique author tags
-    author =  data['Author'].values()
+    author = data['Author'].values()
 
     tags = set()
 
@@ -38,4 +38,4 @@ def add_author(driver):
 
     return tags
 
-print("Author added:", add_author(driver))
+# print("Author added:", add_author(driver))

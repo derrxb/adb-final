@@ -19,19 +19,16 @@ def add_language(driver):
     # Get unique languages
     languages = list(set(data['Language'].values()))
 
+    print(languages)
+
     # Create language nodes
     for language in languages:
-        if language in languages:
-            print('Language already existed')
-            break
-        else:    
-            session.run('CREATE (l:Language {language: $language }) RETURN l', language=language)
-            print('Languages added were: ', add_language(driver))
+        session.run(
+            'CREATE (l:Language {language: $language }) RETURN l', language=language)
 
     session.close()
 
     return languages
 
-print('Current languages: ', add_language(driver))
 
-
+# print('Current languages: ', add_language(driver))

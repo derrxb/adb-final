@@ -21,14 +21,12 @@ def add_provider(driver):
 
     # Create provider nodes
     for provider in providers:
-        if provider in providers:
-            print('Provider already existed')
-            break
-        else:
-            session.run('CREATE (p:Provider {provider: $provider }) RETURN p', provider=provider)
-            print('Providers added were: ', add_provider(driver))
+        session.run(
+            'CREATE (p:Provider {provider: $provider }) RETURN p', provider=provider)
+
     session.close()
 
     return providers
 
-print('Current providers: ', add_provider(driver))
+
+# print('Current providers: ', add_provider(driver))
