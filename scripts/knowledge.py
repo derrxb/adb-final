@@ -14,28 +14,24 @@ driver = GraphDatabase.driver('bolt://localhost:7687',
 
 def add_knowledge(driver):
     session = driver.session()
+    alltags = []
+    for courseId, tags in data['Knowledge'].items():
 
-    # get unique knowledge tags
-    knowledge = data['Knowledge'].values()
+        for tag in tags:
+            tag = {
+            'course_id': courseId,
+            'knowledge': tag
+            }
+            
+            alltags.append(tag)
+       
 
-    tags = set()
-
-    for lists in knowledge:
-        for word in lists:
-            tags.add(word)
-
-    tags = list(tags)
-    print(tags)
-    print(len(tags))
-
-    # add tags
-    for tag in tags:
-        session.run(
-            'CREATE (k:knowledge {knowledge: $knowledge }) RETURN k', knowledge=tag)
-
+    # Load dictionary to neo4j
+    for dicts in alltags:
+        session.run('CREATE (k:Knowledge) SET k = {dict_param}', parameters={'dict_param':dicts})
+    
     session.close()
+    
+    return alltags
 
-    return tags
-
-
-print("Knowledge added:", add_knowledge(driver))
+print("Knowledge added",add_knowledge(driver))
