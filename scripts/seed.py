@@ -7,6 +7,9 @@ from knowledge import add_knowledge
 from weekSection import add_weekSection
 from authors import add_author
 from helpers import clear_db
+from add_course_weeks_section import add_course_weeks_section
+from add_course_lang import add_course_lang
+from add_course_keywords import add_course_keywords
 
 file = open('data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
@@ -27,6 +30,11 @@ def seed_data(driver):
     tags = add_knowledge(driver)
     week = add_weekSection(driver)
     authors = add_author(driver)
+
+    # Add relationships to seed
+    add_course_weeks_section(driver)
+    add_course_lang(driver)
+    add_course_keywords(driver)
 
 
 clear_db(driver)
