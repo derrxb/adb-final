@@ -1,4 +1,4 @@
-from scripts.helpers import get_db, close_db
+from scripts.app_helpers import get_db, close_db
 
 
 class Author:
