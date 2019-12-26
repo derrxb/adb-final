@@ -18,61 +18,63 @@ def add_weekSection(driver):
     # Get weekly data
     weekList = []
     for courseId, courseItem in data['WeekSection'].items():
-        if courseItem is None: # Courses that has no weekly information
+        if courseItem is None:  # Courses that has no weekly information
             continue
-        elif type(courseItem[0]) == str: # Courses that only have week names
-            for weekNum, weekItem in enumerate(courseItem,1):
+        elif type(courseItem[0]) == str:  # Courses that only have week names
+            for weekNum, weekItem in enumerate(courseItem, 1):
                 weekData = {
-                    'course_id':courseId,
-                    'week_num':weekNum,
-                    'week_name':weekItem,
-                    'week_description':None,
-                    'week_timeCommitment':None,
-                    'week_id':None,
-                    'week_slug':None
-                    }
-        elif 'name' in courseItem[0].keys(): # Coursera courses
-            for weekNum, weekItem in enumerate(courseItem,1):
+                    'course_id': courseId,
+                    'week_num': weekNum,
+                    'week_name': weekItem,
+                    'week_description': None,
+                    'week_timeCommitment': None,
+                    'week_id': None,
+                    'week_slug': None
+                }
+        elif 'name' in courseItem[0].keys():  # Coursera courses
+            for weekNum, weekItem in enumerate(courseItem, 1):
                 weekData = {
-                    'course_id':courseId,
-                    'week_num':weekNum,
-                    'week_name':weekItem['name'],
-                    'week_description':weekItem['description'],
-                    'week_timeCommitment':weekItem['timeCommitment'],
-                    'week_id':weekItem['id'],
-                    'week_slug':weekItem['slug']
-                    }
+                    'course_id': courseId,
+                    'week_num': weekNum,
+                    'week_name': weekItem['name'],
+                    'week_description': weekItem['description'],
+                    'week_timeCommitment': weekItem['timeCommitment'],
+                    'week_id': weekItem['id'],
+                    'week_slug': weekItem['slug']
+                }
                 weekList.append(weekData)
-        elif 'sectionTitle' in courseItem[0].keys(): # eWant courses
-            for weekNum, weekItem in enumerate(courseItem,1):
+        elif 'sectionTitle' in courseItem[0].keys():  # eWant courses
+            for weekNum, weekItem in enumerate(courseItem, 1):
                 if type(weekItem['sectionDetail']) == str:
                     weekData = {
-                        'course_id':courseId,
-                        'week_num':weekNum,
-                        'week_name':weekItem['sectionTitle'],
-                        'week_description':weekItem['sectionDetail'],
-                        'week_timeCommitment':None,
-                        'week_id':None,
-                        'week_slug':None
-                        }
+                        'course_id': courseId,
+                        'week_num': weekNum,
+                        'week_name': weekItem['sectionTitle'],
+                        'week_description': weekItem['sectionDetail'],
+                        'week_timeCommitment': None,
+                        'week_id': None,
+                        'week_slug': None
+                    }
                     weekList.append(weekData)
-                else: # eWant courses with descriptions in list form (multiple contents in a week)
+                # eWant courses with descriptions in list form (multiple contents in a week)
+                else:
                     weekData = {
-                        'course_id':courseId,
-                        'week_num':weekNum,
-                        'week_name':weekItem['sectionTitle'],
-                        'week_description':' '.join(weekItem['sectionDetail']),
-                        'week_timeCommitment':None,
-                        'week_id':None,
-                        'week_slug':None
-                        }
+                        'course_id': courseId,
+                        'week_num': weekNum,
+                        'week_name': weekItem['sectionTitle'],
+                        'week_description': ' '.join(weekItem['sectionDetail']),
+                        'week_timeCommitment': None,
+                        'week_id': None,
+                        'week_slug': None
+                    }
                     weekList.append(weekData)
-    
+
     # Load dictionary to neo4j
     for dicts in weekList:
-        session.run('CREATE (w:weekSection) SET w = {dict_param}', parameters={'dict_param':dicts})
+        session.run('CREATE (w:weekSection) SET w = {dict_param}', parameters={
+                    'dict_param': dicts})
     session.close()
-    
+
     return weekList
 
 
