@@ -6,6 +6,7 @@ from provider import add_provider
 from knowledge import add_knowledge
 from weekSection import add_weekSection
 from authors import add_author
+from helpers import clear_db
 
 file = open('data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
@@ -28,4 +29,5 @@ def seed_data(driver):
     authors = add_author(driver)
 
 
+clear_db(driver)
 seed_data(driver)

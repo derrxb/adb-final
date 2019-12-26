@@ -1,14 +1,10 @@
-from flask import g
-from api import driver, app
 
+def clear_db(driver):
+    """Removes all the records from the database to give you a clean slate"""
+    session = driver.session()
 
-def get_db():
-    if not hasattr(g, 'neo4j_db'):
-        g.neo4j_db = driver.session()
-    return g.neo4j_db
+    session.run("MATCH(n) OPTIONAL MATCH(n)-[r]-() DELETE n, r")
 
+    session.close()
 
-@app.teardown_appcontext
-def close_db(error=None):
-    if hasattr(g, 'neo4j_db'):
-        g.neo4j_db.close()
+    print("Successfully removed Data and Relationships from database")
