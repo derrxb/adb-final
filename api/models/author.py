@@ -2,7 +2,7 @@ from scripts.app_helpers import get_db, close_db
 
 
 class Author:
-    def __init__(self, name=None):
+    def __init__(self, name=''):
         self.name = name
 
     def find_by_id(self, id):
