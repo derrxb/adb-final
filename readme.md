@@ -24,6 +24,10 @@ virtualenv venv
 ```
 source venv/bin/activate
 ```
+* If Windows:
+```
+venv\bin\activate
+```
 
 #### Step 2: Install project dependencies
 ```
@@ -45,6 +49,10 @@ python scripts/seed.py
 
 ```
 FLASK_DEBUG=1 FLASK_APP=api/runserver.py FLASK_ENV=development flask run
+```
+* If Windows:
+```
+SET FLASK_DEBUG=1 FLASK_APP=api/runserver.py SET FLASK_ENV=development flask run
 ```
 
 Not sure why but for some reason `python runserver.py` fails to launch the app. So if you can't get the app to run

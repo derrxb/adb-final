@@ -1,0 +1,19 @@
+<!doctype html>
+<title>Search Not Found</title>
+
+{% block content %}
+	<h1>Course not found!</h1>
+	<h3>The following courses could not be found:</h2>
+{% endblock %}
+
+{% with messages = get_flashed_messages() %}
+	{% if messages %}
+		<ul class=flashes>
+			{% for message in messages %}
+			  <li>{{ message }}</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+{% endwith %}
+
+<p>Click here to <a href="{{ url_for('index') }}">return.</a>

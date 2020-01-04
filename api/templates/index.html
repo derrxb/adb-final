@@ -9,7 +9,6 @@
 
     <title>AwesomeMOOCs</title>
 </head>
-
 <body>
 <div id="graph">
 </div>
@@ -44,15 +43,17 @@
     <div class="row mt-4">
         <div class = "col">
             <div class = "card card-body home-card">
-                <form role="search" class= "home-form" id="search">
+                <form method=post role="search" class= "home-form" id="search">
                     <div class="form-group">
                         <div class = "col-12">
                         <div class="form-group mb-lg-0">
                                 <div class="input-group input-group-lg mb-lg-0">
                                     <div class="input-group-prepend"><span class="input-group-text"><i class="fas fa-search"></i></span>
                                     </div>
-                                         <input type="text" placeholder="Search for Course" class="form-control home-search" name="search" index="-1">
-                                         <button class="btn btn-primary home-search-btn" type="submit">Search</button>
+										{% from "_formhelpers.html" import render_field %}
+                                         <!--<input type="text" placeholder="Search for Course" class="form-control home-search" name="search" index="-1">-->
+										{{ render_field(form.search, placeholder="Search for Course", class="form-control home-search", index="-1") }}
+                                        <button class="btn btn-primary home-search-btn" type="submit">Search</button>
                                 </div>
 
                             </div>

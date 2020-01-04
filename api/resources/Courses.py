@@ -12,5 +12,5 @@ class CoursesResource(Resource):
 
         if courses == None:
             abort(404, error="No courses found")
-
+        
         return courses
