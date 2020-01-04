@@ -13,3 +13,6 @@ class AuthorResource(Resource):
             abort(404, error='Author not found')
 
         return author
+
+    def similar_authors(author_id):
+        # find authors similar to the author with the id author_id
