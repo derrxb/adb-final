@@ -12,6 +12,7 @@ from add_course_lang import add_course_lang
 from add_course_keywords import add_course_keywords
 from add_course_provider import add_course_provider
 from add_course_authors import add_course_authors
+from courses_required_prerequisites import create_prerequisites_and_required
 from users import create_users
 
 file = open('data/adb_courses.json', "rb", buffering=0)
@@ -44,6 +45,7 @@ def seed_data(driver):
     add_course_provider(driver)
     add_course_authors(driver)
 
+    create_prerequisites_and_required(driver)
     create_users(driver)
 
 

@@ -13,4 +13,3 @@ class AuthorResource(Resource):
             abort(404, error='Author not found')
 
         return author
-        
