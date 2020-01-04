@@ -25,3 +25,17 @@ class Author:
         close_db()
 
         return results
+
+    def find_all(self, page=0, page_size=20):
+        db = get_db()
+
+        authors = db.run(
+            f"MATCH (a:Author) RETURN a SKIP {page} LIMIT {page_size}"
+        ).records()
+
+        close_db()
+
+        # TODO: Please find a better way to format this. Or encapsulate behind a function.
+        authors = list(map(lambda x: dict(x[0].items()), authors))
+
+        return authors if len(authors) >= 1 else None

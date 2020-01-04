@@ -1,4 +1,4 @@
-# from api.models.author import Author
+from flask import Blueprint
 from flask_restful import Resource, abort
 from api.models.author import Author
 
