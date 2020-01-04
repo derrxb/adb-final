@@ -1,5 +1,5 @@
 import os
-from flask import Flask, g, Blueprint
+from flask import Flask, g, Blueprint, render_template
 from flask_restful import Api
 from flask_cors import CORS
 from .resources.Author import AuthorResource
@@ -15,6 +15,10 @@ api.add_resource(AuthorsResource, '/authors')
 api.add_resource(AuthorResource, '/authors/<int:id>')
 api.add_resource(CoursesResource, '/courses')
 app.register_blueprint(api_bp)
+
+@app.route('/')
+def index():
+ return render_template('index.html')
 
 print(app.url_map)
 
