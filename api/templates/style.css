@@ -1,0 +1,14 @@
+.home-search {
+	position: absolute;
+	z-index: 100;
+}
+
+.home-form {
+	margin-left: 55%;
+	margin-right: 55%;
+}
+
+.home-card.card {
+	background-color: transparent;
+	border: none;
+}
