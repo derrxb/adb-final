@@ -1,6 +1,6 @@
 import json
 from neo4j import GraphDatabase, basic_auth
-from courses import add_course
+from courses import add_course, create_course_levels
 from languages import add_language
 from provider import add_provider
 from knowledge import add_knowledge
@@ -23,6 +23,9 @@ driver = GraphDatabase.driver('bolt://localhost:7687',
 def seed_data(driver):
     # Set up database connection
     session = driver.session()
+
+    # Misc
+    create_course_levels(driver)
 
     # We start with the courses basic information
     for _, course in enumerate(data['Title'].items()):
