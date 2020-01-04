@@ -20,4 +20,5 @@ def add_course_provider(driver):
             'MATCH (c:Course), (p:Provider) WHERE c.course_id = $course_id AND p.provider = $course_provider CREATE (c)-[r:PROVIDED_BY]->(p) RETURN type(r)', course_id=course_id, course_provider=course_provider)
     print(course_provider)
 
+
 add_course_provider(driver)
