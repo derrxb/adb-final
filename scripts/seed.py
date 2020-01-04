@@ -11,6 +11,7 @@ from add_course_weeks_section import add_course_weeks_section
 from add_course_lang import add_course_lang
 from add_course_keywords import add_course_keywords
 from add_course_provider import add_course_provider
+from users import create_users
 
 file = open('data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
@@ -38,6 +39,7 @@ def seed_data(driver):
     add_course_keywords(driver)
     add_course_provider(driver)
 
+    create_users(driver)
 
-clear_db(driver)
+
 seed_data(driver)
