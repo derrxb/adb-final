@@ -14,7 +14,7 @@ class Results(Table):
 	provider = Col('Provider')
     
 class History(Table):
-    # classes = ['table', 'table-bordered', 'table-striped']
+    classes = ['table', 'table-bordered', 'table-striped']
     photo_link = Col('Photo URL', show=False)
     course_id = Col('Course ID', show=False)
     title = Col('Title')
