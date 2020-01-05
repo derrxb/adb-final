@@ -21,12 +21,21 @@
                     </a>
 
                     <a href = "/explore">
-                    <button type="button" class="btn btn-primary">
+					<button type="button" class="btn btn-primary">
                             EXPLORE
                     </button>
                     </a>
-
-                    
+					
+					<a href = "/history">
+					<button type="button" class="btn btn-primary">
+                            History
+                    </button>
+                    </a>
+					
+                    {% from "_formhelpers.html" import login_status %}
+					{{ login_status(login) }}
+					
+					
                 </div>    
     </div>
 </div>

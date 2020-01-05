@@ -8,3 +8,27 @@
         </ul>
     {% endif %}
 {% endmacro %}
+
+{% macro login_status(login) %}
+	{% if login %}
+		{% with messages = get_flashed_messages() %}
+			{% if messages %}
+				{% for message in messages %}
+				  <p>{{ message }}</p>
+				{% endfor %}
+			{% endif %}
+		{% endwith %}
+		<a href = "{{url_for('logout')}}">
+		<button type="button" class="btn btn-primary">
+				Log out
+		</button>
+		</a>
+	{% else %}
+		<a href = "{{url_for('login')}}">
+		<button type="button" class="btn btn-primary">
+				Log in
+		</button>
+		</a>
+	{% endif %}
+{% endmacro %}
+		
