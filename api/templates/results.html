@@ -68,7 +68,7 @@
 				</div>
 
 				<div class="col-md-8">
-					<h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}"">{{ row['title']}}</a></h1>
+					<h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}">{{ row['title']}}</a></h1>
 					<h5> {{ row['authors'] }} | {{ row['provider'] }} | {{ row['language']  }} </h5>
 					<br>
 					<p> {{ row['description'] }} </p>

@@ -97,7 +97,7 @@
 						{% for prereq in prerequisites %}
 							<div class="prerequisite">
 								<h1>
-									{{ prereq['title'] }}
+									<a href="{{ url_for('course_details', id=prereq['course_id']) }}">{{ prereq['title'] }}</a>
 								</h1>
 
 								<span>	{{ prereq['provider'] }} </span>

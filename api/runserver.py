@@ -91,8 +91,14 @@ def course_details(id):
         session['username'], id) if 'username' in session else False
 
     prerequisites = Course().get_prerequisites(id)
-    last_prereq_id = prerequisites[len(
-        prerequisites) - 1]['course_id'] if len(prerequisites) > 1 else []
+
+    last_prereq_id = None
+    if len(prerequisites) > 1:
+        last_prereq_id = prerequisites[len(prerequisites) - 1]['course_id']
+    elif len(prerequisites) == 1:
+        last_prereq_id = prerequisites[0]['course_id']
+    else:
+        last_prereq_id = []
 
     return render_template('course.html',
                            form=search,
