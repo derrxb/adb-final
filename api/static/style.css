@@ -1,3 +1,12 @@
+/* UNIVERSE */
+
+footer {
+	position: relative;
+    height: 60px;
+    bottom: 0;
+    width: 100%;
+}
+
 /* HOME */
 .home-search {
 	position: absolute;
@@ -44,6 +53,10 @@ body {
 	box-shadow: 0px 1px 16px 0px rgba(0, 0, 0, 0.125);
 	border-radius: 7px;
 	padding: 1em;
+}
+
+.results-parent-container {
+	min-height: 100vh;
 }
 
 .results-title {
@@ -138,8 +151,15 @@ body {
 }
 
 .course-details {
-	min-height: 100vh;
+	min-height: 50vh;
 	font-size: 16px;
+}
+
+.course-row {
+	box-shadow: 0px 1px 16px 0px rgba(0, 0, 0, 0.125);
+    border-radius: 7px;
+    padding: 1em;
+    margin-bottom: 1em;
 }
 
 /* Tag styles */

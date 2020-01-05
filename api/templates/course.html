@@ -113,15 +113,23 @@
 	{% endif %}
 	</section>
 	
-	<section>
+	<hr />
+
+	<section class = "container">
+		<h1 class="text-center"> Course Content </h1>
+		<br/> 
 		{% for row in weekSections %}
-		<div class="row week-row">
+			<div class="row week-row course-row">
+				<div class="col-md-4">
+					<h1 class="results-title">Week {{ row['week_num'] }} </h1>
+				</div>
 			<div class="col-md-8">
-				<h1 class="results-title">Week {{ row['week_num'] }}: {{ row['week_name'] }}</h1>
+				<h1> {{ row['week_title'] }} </h1>
 				<p> {{ row['week_description'] }} </p>
 			</div>
 		</div>
-		{% endfor %}		
+		{% endfor %}	
+		</div>	
 	</section>
 
 	<footer id="sticky-footer" class="py-4 bg-light">
