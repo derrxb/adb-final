@@ -36,6 +36,7 @@ def seed_data(driver):
     language = add_language(driver)
     providers = add_provider(driver)
     tags = add_knowledge(driver)
+    week = add_weekSection(driver)
     authors = add_author(driver)
 
     # Add relationships to seed
