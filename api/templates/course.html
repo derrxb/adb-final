@@ -70,7 +70,6 @@
 	</div>
 
 	<section class="container course-details">
-
 		<section class="section">
 			<h3 class="sub-heading">About this course</h3>
 			<p>{{ course['description'] }}</p>
@@ -111,7 +110,43 @@
 		</section>
 	</section>
 	{% endif %}
+
+	{% if users %}
+		<section>
+			<div class="section">
+				<h3 class="sub-heading">Users History</h3>
+
+				<h4 style="margin-bottom: 1em">Find people with similar interests like you</h4>
+
+				{% for user in users %}
+					<div class="prerequisite">
+						<h1>
+							<a href="{{ url_for('history', username=user['username']) }}">{{ user['name'] }} (@{{ user['username'] }}) </a> - {{ user['university'] }}
+						</h1>
+
+						<div class="enrolled-user-details">
+							<div>
+								{% if user['status'] == 'IN_PROGRESS' %}
+									<h1 class="history-badge badge badge-success enrolled-user-details-badge"> In Progress </h1>
+								{% else %}
+									<h1 class="history-badge badge badge-warning enrolled-user-details-badge"> Completed </h1>
+								{% endif %}
+							</div>
+
+							<span>{{ user['enrollment_date'] }}
+								{% if user['completion_date'] != None %}
+									to {{ user['completion_date']}}
+								{% endif %}
+							</span>
+						</div>
+					</div>
+				{% endfor %}
+			</div>
+		</section>
+	{% endif %}
 	</section>
+
+
 
 	<hr />
 

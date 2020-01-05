@@ -142,11 +142,22 @@ class Course:
     def get_enrolled_users(self, course_id):
         db = get_db()
 
-        users = format_cypher_list(db.run('''
+        results = db.run('''
             MATCH (u:User)-[r:ENROLLED]->(c:Course)
             WHERE c.course_id = $course_id
-            RETURN u
-        ''', course_id=course_id))
+            RETURN u.name, u.username, r.enrollment_date, r.completion_date, r.status, u.university
+        ''', course_id=course_id).records()
+
+        users = []
+        for user in results:
+            users.append({
+                'name': user[0],
+                'username': user[1],
+                'enrollment_date': str(user[2]),
+                'completion_date': str(user[3]) if user[3] != None else None,
+                'status': user[4],
+                'university': user[5]
+            })
 
         close_db()
 
