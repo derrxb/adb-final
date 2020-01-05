@@ -61,7 +61,7 @@
           
           <h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}">{{ row['title']}}</a></h1>
           <h5> {{ row['authors'] }} | {{ row['provider'] }} | {{ row['language']  }} </h5>
-          {% if row['status'] == "IN PROGRESS" %}
+          {% if row.status == 'IN_PROGRESS' %}
             <h1 class= "history-badge badge badge-success"> {{ row['status'] }} </h1>
           {% else %}
             <h1 class= "history-badge badge badge-warning"> {{ row['status'] }} </h1>
