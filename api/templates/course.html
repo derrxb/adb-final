@@ -59,17 +59,13 @@
 			<h4 class="course-title-sub"> {{ course['authors'] }} | {{ course['provider'] }} | {{ course['language']  }} </h4>
 
 			{% if 'username' in session %}
-				<div>
-					<button id="enroll-in-course"
-									data-course-id="{{ course['course_id']}}"
-									data-username="{{ session['username']}}"
-									type="button"
-									class="btn {{ 'btn-success btn-lg' if enrolled == True else 'btn-light btn-lg'}}">
-						{{ 'Enrolled' if enrolled == True else 'Enroll In Course' }}
-
-					</button>
-				</div>
-				{% endif %}
+			<div>
+				<button id="enroll-in-course" data-course-id="{{ course['course_id']}}" data-username="{{ session['username']}}"
+					type="button" class="btn {{ 'btn-success btn-lg' if enrolled == True else 'btn-light btn-lg'}}">
+					{{ 'Enrolled' if enrolled == True else 'Enroll In Course' }}
+				</button>
+			</div>
+			{% endif %}
 		</div>
 	</div>
 
@@ -80,15 +76,52 @@
 			<p>{{ course['description'] }}</p>
 		</section>
 
-		<div class="section">
-			<h3 class="sub-heading">Skills you will learn</h3>
+		{% if course['tags'] %}
+			<div class="section">
+				<h3 class="sub-heading">Skills you will learn</h3>
 
-			<div class="tag-container">
-				{% for tag in course['tags'].split(', ') %}
-				<div class="tag">{{ tag }}</div>
-				{% endfor %}
+				<div class="tag-container">
+					{% for tag in course['tags'].split(', ') %}
+						<div class="tag">{{ tag }}</div>
+					{% endfor %}
+				</div>
+			</div>
+		{% endif %}
+		{% if prerequisites %}
+			<section>
+				<div class="section">
+					<h3 class="sub-heading">Course Prerequisites</h3>
+
+					<div class="prerequisite-container">
+						{% for prereq in prerequisites %}
+							<div class="prerequisite">
+								<h1>
+									<a href="{{ url_for('course_details', id=prereq['course_id']) }}">{{ prereq['title'] }}</a>
+								</h1>
+
+								<span>	{{ prereq['provider'] }} </span>
+							</div>
+
+							{% if last_prereq_id != prereq['course_id'] %}
+								<img class="prereq-img" src="/static/down.svg" alt="requires course" height="24" width="24"></img>
+							{% endif %}
+						{% endfor %}
+					</div>
+				</div>
+			</section>
+		</section>
+	{% endif %}
+	</section>
+	
+	<section>
+		{% for row in weekSections %}
+		<div class="row week-row">
+			<div class="col-md-8">
+				<h1 class="results-title">Week {{ row['week_num'] }}: {{ row['week_name'] }}</h1>
+				<p> {{ row['week_description'] }} </p>
 			</div>
 		</div>
+		{% endfor %}		
 	</section>
 
 	<footer id="sticky-footer" class="py-4 bg-light">

@@ -11,7 +11,7 @@ def page():
 
 def page_size():
     """Returns the page size for queries"""
-    page_size = int(request.args.get('page_size') or 20)
+    page_size = int(request.args.get('page_size') or 30)
 
     return page_size if page_size >= 1 else 10
 

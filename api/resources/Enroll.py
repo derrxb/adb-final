@@ -25,9 +25,6 @@ class EnrollResource(Resource):
         if requires_prerequisite == True:
             abort(403, error="This course has a prerequite that you haven't taken")
 
-        print(requires_prerequisite)
-
         results = User().enroll_in_course(username, course_id)
 
-        # abort(403, error="This courseasdfasdf has a prerequite that you haven't taken")
         return results

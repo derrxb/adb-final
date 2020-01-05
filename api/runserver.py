@@ -59,10 +59,7 @@ def search_results(search):
     search_string = search.data['search']
 
     if search_string == '':
-        results = Course().find_all(page_number(), page_size())
-        table = Results(results)
-        table.border = True
-        return render_template('results.html', table=table, results=results, form=search)
+        return render_template('notfound.html')
     else:
         # display results
         results = Course().find(search_string, page_number(), page_size())
@@ -97,7 +94,25 @@ def course_details(id):
     enrolled = User().enrolled_in(
         session['username'], id) if 'username' in session else False
 
-    return render_template('course.html', form=search, course=course, enrolled=enrolled)
+    prerequisites = Course().get_prerequisites(id)
+
+    last_prereq_id = None
+    if len(prerequisites) > 1:
+        last_prereq_id = prerequisites[len(prerequisites) - 1]['course_id']
+    elif len(prerequisites) == 1:
+        last_prereq_id = prerequisites[0]['course_id']
+    else:
+        last_prereq_id = []
+
+    weekSections = Course().get_weekSections(id)
+
+    return render_template('course.html',
+                           form=search,
+                           course=course,
+                           enrolled=enrolled,
+                           prerequisites=prerequisites,
+                           last_prereq_id=last_prereq_id,
+                           weekSections=weekSections)
 
 
    
@@ -147,8 +162,9 @@ def history():
 #    if session['username'] == None:
 #        error = 'Not logged in'
 #    return render_template('login.html', error=error)
-        
-@app.route('/user-search', methods=['GET','POST'])
+
+
+@app.route('/user-search', methods=['GET', 'POST'])
 def user():
     if 'username' in session:
         flash('Logged in as %s' % escape(session['username']))
@@ -160,17 +176,16 @@ def user():
         return user_search_results(search)
     return render_template('user-search.html', form=search, login=login)
 
-#@app.route('/results')
+# @app.route('/results')
+
+
 def user_search_results(search):
     results = []
 #    search_dim = search.data['select']
     search_string = search.data['search']
- 
+
     if search_string == '':
-        results = User().find_all(page_number(), page_size())
-        table = UserResults(results)
-        table.border = True
-        return render_template('user-results.html', table=table, results=results, form=search)
+        return render_template('notfound.html')
     else:
         # display results
         results = User().find(search_string, page_number(), page_size())
@@ -185,6 +200,7 @@ def user_search_results(search):
     if request.method == 'POST':
         return user_search_results(search)
     return render_template('user-search.html', form=search)
+
 
 print(app.url_map)
 
