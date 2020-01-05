@@ -25,7 +25,12 @@ def contains(text, array=[]):
 def format_node(node):
     """Formats a Neo4j Node to JSON Object"""
     temp = dict(node.items())
-    temp['node_type'] = node.id
-    temp['node_id'] = list(node.labels)[0]
+    temp['node_id'] = node.id
+    temp['node_type'] = list(node.labels)[0]
 
     return temp
+
+
+def format_cypher_list(query_results):
+    """Converts a Cypher query results into a JSON object"""
+    return list(map(lambda x: format_node(x.value()), query_results))
