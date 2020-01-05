@@ -1,6 +1,6 @@
 import json
 from neo4j import GraphDatabase, basic_auth
-from helpers import format_node, format_cypher_list
+from helpers import format_node, format_cypher_list, get_connection_details
 from random import randint
 from datetime import date, timedelta
 
@@ -9,10 +9,14 @@ from datetime import date, timedelta
 file = open('data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
 
+graphenedb_url = get_connection_details()[0]
+graphenedb_user = get_connection_details()[1]
+graphenedb_pass = get_connection_details()[2]
+
 # Create graph driver
 # This is used to create a session so we can run the code while working on it.
-driver = GraphDatabase.driver('bolt://localhost:7687',
-                              auth=basic_auth('neo4j',  'password'))
+driver = GraphDatabase.driver(graphenedb_url,
+                              auth=basic_auth(graphenedb_user, graphenedb_pass))
 
 
 def enroll_user_in_course(user, course_id, enrollment, session):

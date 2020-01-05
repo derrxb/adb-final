@@ -1,15 +1,19 @@
 import json
 from neo4j import GraphDatabase, basic_auth
-from helpers import contains
+from helpers import contains, get_connection_details
 
 # Load and parse data
 file = open('data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
 
+graphenedb_url = get_connection_details()[0]
+graphenedb_user = get_connection_details()[1]
+graphenedb_pass = get_connection_details()[2]
+
 # Create graph driver
 # This is used to create a session so we can run the code while working on it.
-driver = GraphDatabase.driver('bolt://localhost:7687',
-                              auth=basic_auth('neo4j',  'password'))
+driver = GraphDatabase.driver(graphenedb_url,
+                              auth=basic_auth(graphenedb_user, graphenedb_pass))
 
 
 # Relationships: Prerequisite; Required
@@ -88,6 +92,7 @@ def create_prerequisites_and_required(driver):
     """Creates Prerequisite and Required relationships between charges"""
     for divider in part_identifier:
         create_relationships(divider, driver)
+
 
 if __name__ == '__main__':
     create_prerequisites_and_required(driver)
