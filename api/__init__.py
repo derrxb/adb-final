@@ -32,6 +32,19 @@ def create_app(test_config=None):
 app = create_app()
 app.secret_key = os.urandom(24)
 
+# Publish in heroku
+graphenedb_url = os.environ.get("GRAPHENEDB_BOLT_URL")
+graphenedb_user = os.environ.get("GRAPHENEDB_BOLT_USER")
+graphenedb_pass = os.environ.get("GRAPHENEDB_BOLT_PASSWORD")
+
+# for running in local computer
+if not graphenedb_url or graphenedb_url == '':
+    graphenedb_url = 'bolt://localhost:7687'
+if not graphenedb_user or graphenedb_user == '':
+    graphenedb_user = 'neo4j'
+if not graphenedb_pass or graphenedb_pass == '':
+    graphenedb_pass = 'password'
+
 # Link the app to the Flask database
-driver = GraphDatabase.driver('bolt://localhost:7687',
-                              auth=basic_auth('neo4j',  'password'))
+driver = GraphDatabase.driver(
+    graphenedb_url, auth=basic_auth(graphenedb_user, graphenedb_pass))
