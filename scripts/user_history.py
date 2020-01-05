@@ -35,7 +35,7 @@ def add_enrollment_info(courses, completed=True):
         enrollment[course['course_id']] = {
             'enrollment_date': str(current_date - course_start),
             'completion_date': str(current_date) if completed else None,
-            'status': 'COMPLETED' if completed else 'PENDING'
+            'status': 'COMPLETED' if completed else 'IN_PROGRESS'
         }
 
         current_date = current_date - course_start
