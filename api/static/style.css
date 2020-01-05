@@ -228,7 +228,7 @@ body {
 }
 
 /* ERROR */ 
-.error {
+.errorbg {
 	background: url("error.jpg") !important;
 	background-size: cover !important
 }
