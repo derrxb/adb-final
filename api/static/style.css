@@ -43,6 +43,12 @@ body {
 	background-size: cover;
 }
 
+.feat-image {
+	width: 250px;
+    height: 250px;
+    object-fit: cover;
+}
+
 /* results */
 .results-row {
 	flex-direction: row;
@@ -219,4 +225,14 @@ body {
 
 .prereq-img {
 	color: red;
+}
+
+/* ERROR */ 
+.error {
+	background: url("error.jpg") !important;
+	background-size: cover !important
+}
+
+.jumbotron {
+	background: none;
 }

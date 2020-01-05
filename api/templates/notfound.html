@@ -1,10 +1,29 @@
 <!doctype html>
-<title>Search Not Found</title>
 
-{% block content %}
-	<h1>Item not found!</h1>
-	<h3>The item could not be found:</h2>
-{% endblock %}
+<html> 
+
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="http://neo4j-contrib.github.io/developer-resources/language-guides/assets/css/main.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+
+  <title>Search Not Found</title>
+</head>
+
+
+
+<body class="error">
+
+<div class="container h-100 d-flex justify-content-center">
+    <div class="jumbotron my-auto">
+      
+     <h1 class="text-center">Item not found!</h1>
+	<h3 class="text-center">The item could not be found:</h3>
+
 
 {% with messages = get_flashed_messages() %}
 	{% if messages %}
@@ -16,4 +35,14 @@
 	{% endif %}
 {% endwith %}
 
-<p>Click here to <a href="{{ url_for('index') }}">return.</a>
+<p class="text-center">Click here to <a href="{{ url_for('index') }}">return.</a> </p>
+    </div>
+ </div>
+
+
+	
+
+
+
+</body>
+</html>
