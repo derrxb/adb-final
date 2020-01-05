@@ -16,85 +16,94 @@
 
 {% block body %}
 {% if error %}
-    <p class=error><strong>Error:</strong> {{ error }} </p>
+<p class=error><strong>Error:</strong> {{ error }} </p>
 {% else %}
 <header>
-	<div role="navigation" class="navbar navbar-static-top navbar-light bg-light">
+  <div role="navigation" class="navbar navbar-static-top navbar-light bg-light">
     <div class="container">
-            <div class="col-md-8">
-                <div class="logo-well">
-                    <a href="/">
-                    <img src="static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
-                    </a>
+      <div class="col-md-8">
+        <div class="logo-well">
+          <a href="/">
+            <img src="static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
+          </a>
 
-                    <a href = "/explore">
-					           <button type="button" class="btn btn-primary"> EXPLORE </button>
-                    </a>
+          <a href="/explore">
+            <button type="button" class="btn btn-primary"> EXPLORE </button>
+          </a>
 
-                    <a href = "/user-search">
-                      <button type="button" class="btn btn-primary"> Search for Users </button>
-                    </a>
-                </div>   
-            </div>
+          <a href="/user-search">
+            <button type="button" class="btn btn-primary"> Search for Users </button>
+          </a>
+        </div>
+      </div>
 
-            <div class="col-md-4 text-right">
-                  {% from "_formhelpers.html" import login_status %}
-                  {{ login_status(login) }}
-            </div> 
-    </div>  	
+      <div class="col-md-4 text-right">
+        {% from "_formhelpers.html" import login_status %}
+        {{ login_status(login) }}
+      </div>
+    </div>
 
 </header>
 
-  <section>
-    <div class="container">
-      
-      <h1>History</h1>
+<div class="hero-wrapper hero-wrapper--user">
+  <div class="container hero-details">
+    <h1 class="course-title">{{ user['name'] }} (@{{ user['username'] }})</h1>
+    <h4 class="course-title-sub"> {{ user['university'] }}  </h4>
+  </div>
+</div>
 
-      {% for row in results %}
-        
-      <div class="row results-row">
-        <div class="col-md-4 results-container">
-          <img class="img-fluid results-image" src="{{ row['photo_link'] }}">
-        </div>
+<section>
+  <div class="container">
 
-        <div class="col-md-8">
-          
-          <h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}">{{ row['title']}}</a></h1>
-          <h5> {{ row['authors'] }} | {{ row['provider'] }} | {{ row['language']  }} </h5>
-          {% if row.status == 'IN_PROGRESS' %}
-            <h1 class= "history-badge badge badge-success"> {{ row['status'] }} </h1>
-          {% else %}
-            <h1 class= "history-badge badge badge-warning"> {{ row['status'] }} </h1>
-          {% endif %}
-          <h5> Enrolled: {{ row['enrollment_date'] }} | Completed: {{ row['completion_date'] }} </h5> 
-          <br/>
-          <a href= "{{ row['direct_link'] }}"> Direct Link to Course </a>
-          <br>
-          <p> {{ row['description'] }} </p>
-          
-        </div>
+    <h1>History</h1>
+
+    {% for row in results %}
+
+    <div class="row results-row">
+      <div class="col-md-4 results-container">
+        <img class="img-fluid results-image" src="{{ row['photo_link'] }}">
+      </div>
+
+      <div class="col-md-8">
+
+        <h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}">{{ row['title']}}</a>
+        </h1>
+        <h5> {{ row['authors'] }} | {{ row['provider'] }} | {{ row['language']  }} </h5>
+        {% if row.status == 'IN_PROGRESS' %}
+        <h1 class="history-badge badge badge-success"> {{ row['status'] }} </h1>
+        {% else %}
+        <h1 class="history-badge badge badge-warning"> {{ row['status'] }} </h1>
+        {% endif %}
+        <h5> Enrolled: {{ row['enrollment_date'] }} | Completed: {{ row['completion_date'] }} </h5>
+        <br />
+        <a href="{{ row['direct_link'] }}"> Direct Link to Course </a>
+        <br>
+        <p> {{ row['description'] }} </p>
 
       </div>
 
-        
-
-      {% endfor %}
-
     </div>
-  </section>
+
+
+
+    {% endfor %}
+
+  </div>
+</section>
 
 
 {% endif %}
 {% endblock %}
 
 <!-- scripts for formatting -->
-  <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-  <script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
-  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
-  </script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
-  </script>
-  <script src="https://kit.fontawesome.com/7509859ed7.js" crossorigin="anonymous"></script>
+<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+</script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+  integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+</script>
+<script src="https://kit.fontawesome.com/7509859ed7.js" crossorigin="anonymous"></script>
+
 </html>
