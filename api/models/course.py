@@ -1,4 +1,5 @@
 from scripts.app_helpers import get_db, close_db
+from scripts.helpers import format_cypher_list
 
 
 class Course:
@@ -36,16 +37,16 @@ class Course:
 
     def find(self, query='', page=0, page_size=20):
         db = get_db()
-        # Problem: search using author, results in author column only output 1 author (keyword)
-        # and not multiple, if there are any.
+
         courses = db.run(
-            f'MATCH (a:Author)-[:TEACHES]->(c:Course)-[:RELATED_TO]->(k:Knowledge),\
-                (c:Course)-[:CONDUCTED_IN]->(l:Language), (c:Course)-[:PROVIDED_BY]->(p:Provider)\
-                WHERE (c.description =~ ".*(?i){query}.*" OR c.title =~".*(?i){query}.*"\
-                OR a.author =~ ".*(?i){query}.*" OR k.knowledge =~ ".*(?i){query}.*")\
-                RETURN c.course_id, c.description, c.title, c.photo_link, c.direct_link,\
-                collect(DISTINCT a.author) as authors, collect(DISTINCT k.knowledge) as tags,\
-                l.language, p.provider SKIP {page} LIMIT {page_size}'
+            f'MATCH (c:Course) WHERE (c.title =~".*(?i){query}.*")\
+              WITH c MATCH (a:Author)-[:TEACHES]->(c), \
+              (c)-[:CONDUCTED_IN]->(l:Language), (c)-[:PROVIDED_BY]->(p:Provider) \
+              OPTIONAL MATCH (c)-[:RELATED_TO]->(k:Knowledge) \
+              WHERE (a.author =~ ".*(?i){query}.*" OR k.knowledge =~ ".*(?i){query}.*") \
+              RETURN c.course_id, c.description, c.title, c.photo_link, c.direct_link, \
+              collect(DISTINCT a.author) as authors, collect(DISTINCT k.knowledge) as tags, \
+              l.language, p.provider SKIP {page} LIMIT {page_size}'
         ).records()
 
         result_array = []
@@ -71,12 +72,12 @@ class Course:
 
         # Load and build course using a given course_id
         course = db.run(
-            f'MATCH (a:Author)-[:TEACHES]->(c:Course)-[:RELATED_TO]->(k:Knowledge),\
-                (c:Course)-[:CONDUCTED_IN]->(l:Language), (c:Course)-[:PROVIDED_BY]->(p:Provider)\
-                WHERE c.course_id = $course_id \
-                RETURN c.course_id, c.description, c.title, c.photo_link, c.direct_link,\
-                collect(DISTINCT a.author) as authors, collect(DISTINCT k.knowledge) as tags,\
-                l.language, p.provider', course_id=id
+            '''MATCH(c: Course {course_id: $course_id}), (a: Author)-[:TEACHES] -> (c),
+                (c)-[:CONDUCTED_IN] -> (l: Language), (c)-[:PROVIDED_BY] -> (p: Provider)
+                OPTIONAL MATCH(c)-[:RELATED_TO] -> (k: Knowledge)
+                RETURN c.course_id, c.description, c.title, c.photo_link, c.direct_link,
+                collect(DISTINCT a.author) as authors, collect(DISTINCT k.knowledge) as tags,
+                l.language, p.provider''', course_id=id
         ).single()
 
         if course != None:
@@ -87,7 +88,7 @@ class Course:
                 "photo_link": course[3],
                 "direct_link": course[4],
                 "authors": ', '.join(course[5]),
-                "tags": ', '.join(course[6]),
+                "tags": ', '.join(course[6]) if course[6] != None else [],
                 "language": course[7],
                 "provider": course[8]
             }
@@ -95,3 +96,13 @@ class Course:
             return formatted_course
         else:
             None
+
+    def get_prerequisites(self, course_id):
+        db = get_db()
+
+        query = '''MATCH(c: Course)-[r:REQUIRES*1] -> (c2: Course)
+                   WHERE c.course_id= $course_id RETURN c2'''
+
+        courses = format_cypher_list(db.run(query, course_id=course_id))
+
+        return courses

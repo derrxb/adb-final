@@ -59,17 +59,13 @@
 			<h4 class="course-title-sub"> {{ course['authors'] }} | {{ course['provider'] }} | {{ course['language']  }} </h4>
 
 			{% if 'username' in session %}
-				<div>
-					<button id="enroll-in-course"
-									data-course-id="{{ course['course_id']}}"
-									data-username="{{ session['username']}}"
-									type="button"
-									class="btn {{ 'btn-success btn-lg' if enrolled == True else 'btn-light btn-lg'}}">
-						{{ 'Enrolled' if enrolled == True else 'Enroll In Course' }}
-
-					</button>
-				</div>
-				{% endif %}
+			<div>
+				<button id="enroll-in-course" data-course-id="{{ course['course_id']}}" data-username="{{ session['username']}}"
+					type="button" class="btn {{ 'btn-success btn-lg' if enrolled == True else 'btn-light btn-lg'}}">
+					{{ 'Enrolled' if enrolled == True else 'Enroll In Course' }}
+				</button>
+			</div>
+			{% endif %}
 		</div>
 	</div>
 
@@ -80,15 +76,17 @@
 			<p>{{ course['description'] }}</p>
 		</section>
 
-		<div class="section">
-			<h3 class="sub-heading">Skills you will learn</h3>
+		{% if course['tags'] %}
+			<div class="section">
+				<h3 class="sub-heading">Skills you will learn</h3>
 
-			<div class="tag-container">
-				{% for tag in course['tags'].split(', ') %}
-				<div class="tag">{{ tag }}</div>
-				{% endfor %}
+				<div class="tag-container">
+					{% for tag in course['tags'].split(', ') %}
+						<div class="tag">{{ tag }}</div>
+					{% endfor %}
+				</div>
 			</div>
-		</div>
+		{% endif %}
 	</section>
 
 	<footer id="sticky-footer" class="py-4 bg-light">
