@@ -1,109 +1,104 @@
-<!DOCTYPE HTML> 
+<!DOCTYPE HTML>
 
 <html>
+
 <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="http://neo4j-contrib.github.io/developer-resources/language-guides/assets/css/main.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="http://neo4j-contrib.github.io/developer-resources/language-guides/assets/css/main.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+		integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+	<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
 
-    <link rel="stylesheet" type= "text/css" href= "{{ url_for('static',filename='style.css') }}">
+	<link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
 
-	<title>Course Search Results</title>    
+	<title>Course Search Results</title>
 </head>
 
-
-
-
 <body>
+	<header>
+		<div role="navigation" class="navbar navbar-static-top navbar-light bg-light">
+			<div class="container">
+				<div class="col-md-6">
+					<div class="logo-well">
+						<a href="/">
+							<img src="static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
+						</a>
 
-<header>
-<div role="navigation" class="navbar navbar-static-top navbar-light bg-light">
-    <div class="container">
-    			<div class = "col-md-6">
-                	<div class="logo-well">
-                    	<a href="/">
-                    		<img src="static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
-                    	</a>
+						<a href="/explore">
+							<button type="button" class="btn btn-primary"> EXPLORE </button>
+						</a>
 
-                    	<a href = "/explore">
-                    		<button type="button" class="btn btn-primary"> EXPLORE </button>
-                    	</a>
+					</div>
+				</div>
 
-                	</div>
-                </div>
-
-                <div class="col-md-6">
-                    <form method=post role="search" id="search">
-                    	<div class="form-group">
-                        	<div class = "col-12">
-                        		<div class="form-group mb-lg-0">
-                                	<div class="input-group input-group-lg mb-lg-0">
-                                    	<div class="input-group-prepend"><span class="input-group-text">
-                                    		<i class="fas fa-search"></i></span>
-                                    	</div>
+				<div class="col-md-6">
+					<form method=post role="search" id="search">
+						<div class="form-group">
+							<div class="col-12">
+								<div class="form-group mb-lg-0">
+									<div class="input-group input-group-lg mb-lg-0">
+										<div class="input-group-prepend"><span class="input-group-text">
+												<i class="fas fa-search"></i></span>
+										</div>
 										{% from "_formhelpers.html" import render_field %}
-                                         <!--<input type="text" placeholder="Search for Course" class="form-control home-search" name="search" index="-1">-->
+										<!--<input type="text" placeholder="Search for Course" class="form-control home-search" name="search" index="-1">-->
 										{{ render_field(form.search, placeholder="Search for Course", class="form-control home-search", index="-1") }}
-                                        <button class="btn btn-primary home-search-btn" type="submit">Search</button>
-                                </div>
+										<button class="btn btn-primary home-search-btn" type="submit">Search</button>
+									</div>
 
-                            </div>
-                        </div>
-
-                      
-                    	</div>
-               	 	</form>
-               	 </div>
-
-                    
-
-                    
-    </div>    
-</div>
+								</div>
+							</div>
 
 
-</header>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</header>
 
-<section>
+	<section>
+		<div class="container">
+			<h1>Results:</h1>
+			{% for row in results %}
+			<div class="row results-row">
+				<div class="col-md-4 results-container">
+					<img class="img-fluid results-image" src="{{ row['photo_link'] }}">
+				</div>
+
+				<div class="col-md-8">
+					<h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}"">{{ row['title']}}</a></h1>
+					<h5> {{ row['authors'] }} | {{ row['provider'] }} | {{ row['language']  }} </h5>
+					<br>
+					<p> {{ row['description'] }} </p>
+				</div>
+
+			</div>
+
+			{% endfor %}
+
+		</div>
+	</section>
+
+	<footer id="sticky-footer" class="py-4 bg-light">
+		<div class="container text-center">
+			<small>Copyright &copy; awesomemoocs </small>
+		</div>
+	</footer>
+
+	<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+	<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
 
 
-<div class = "container">
-<h1>Results:</h1>
-{% for row in results %}
-<div class = "row results-row">
-	<div class="col-md-4">
-		<img class= "img-fluid" src ="{{ row['photo_link'] }}">
-	</div>
+	<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+		integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous">
+	</script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
+	</script>
 
-	<div class="col-md-8">
-		<h1 class = "results-title"> {{ row['title']}} </h1>
-		<h5> {{ row['authors'] }} | {{ row['provider'] }} | {{ row['language']  }} </h5>
-		<br>
-		<p> {{ row['description'] }} </p>
-	</div>
-
-</div>
-
-{% endfor %}
-
-</div>
-</section>
-
-<footer id="sticky-footer" class="py-4 bg-light">
-    <div class="container text-center">
-      <small>Copyright &copy; awesomemoocs </small>
-    </div>
-</footer>
-
-<script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
-<script src="http://d3js.org/d3.v3.min.js" type="text/javascript"></script>
-
-
-<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
-
-<script src="https://kit.fontawesome.com/7509859ed7.js" crossorigin="anonymous"></script>
+	<script src="https://kit.fontawesome.com/7509859ed7.js" crossorigin="anonymous"></script>
 
 </body>
+
 </html>
