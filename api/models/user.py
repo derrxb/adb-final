@@ -150,7 +150,7 @@ class User:
 
         courses = db.run(
             f"MATCH (u:User)-[e:ENROLLED]->(c:Course)\
-            RETURN u.name, collect(DISTINCT c.title) as Courses, collect(DISTINCT c.course_id) as CourseIds SKIP {page} LIMIT {page_size}"
+            RETURN u.name, collect(DISTINCT c.title) as Courses, collect(DISTINCT c.course_id) as CourseIds, u.username SKIP {page} LIMIT {page_size}"
         ).records()
 
         result_array = []
@@ -158,7 +158,8 @@ class User:
             result_array += [{
                 "user": item[0],
                 "courses_taken": item[1],
-                "course_id": item[2]
+                "course_id": item[2],
+                "username": item[3]
             }]
 
         close_db()
@@ -171,7 +172,7 @@ class User:
         # and not multiple, if there are any.
         courses = db.run(
             f'MATCH (u:User)-[e:ENROLLED]->(c:Course) WHERE (u.name =~ ".*(?i){query}.*")\
-            RETURN u.name, u.username, collect(DISTINCT c.title) as Courses, collect(DISTINCT c.course_id) as CourseIds SKIP {page} LIMIT {page_size}'
+            RETURN u.name, collect(DISTINCT c.title) as Courses, collect(DISTINCT c.course_id) as CourseIds, u.username  SKIP {page} LIMIT {page_size}'
         ).records()
 
         result_array = []

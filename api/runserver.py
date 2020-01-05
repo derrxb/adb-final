@@ -51,9 +51,7 @@ def index():
         return search_results(search)
 
     rand_ids = random.sample(range(1, 100), 4)
-    # convert to string
-    str_rand_ids = " ".join(str(x) for x in rand_ids)
-
+    
     featured = []
     for num in rand_ids:
         feat = Course().find_by_id(str(num))
@@ -192,7 +190,19 @@ def user():
     search = SearchForm(request.form)
     if request.method == 'POST':
         return user_search_results(search)
-    return render_template('user-search.html', form=search, login=login)
+
+    rand_ids = random.sample(range(1, 100), 4)
+    
+    featured = []
+    for num in rand_ids:
+        feat = Course().find_by_id(str(num))
+        featured.append(feat)
+        
+    return render_template('user-search.html', form=search, login=login, rand_ids=rand_ids, results=featured)
+
+    
+
+    
 
 # @app.route('/results')
 

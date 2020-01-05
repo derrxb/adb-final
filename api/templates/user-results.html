@@ -63,19 +63,22 @@
 
 			{% for row in results %}
 			<div class="row results-row">
-				<div class="col-md-4 results-container">
-					<h1> {{ row['user'] }} </h1>
-					<img class="img-fluid results-image" src="{{ row['photo_link'] }}">
+				<div class="col-md-4 results-container hero-wrapper--user">
+					<a class="text-white" href="{{ url_for('history', username = row['username'] ) }}">  
+						<h1> {{ row['user'] }} </h1>
+					</a>
+					
 				</div>
 
 				<div class="col-md-8">
-					<h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}">{{ row['title']}}</a></h1>
+					
 					
 					<br>
 					<h1> Courses Taken </h1>
 					{% for taken in row.courses_taken %}
-						
-							<h3 class="results-title"><a href="{{ url_for('course_details', id= row['course_id'][loop.index] ) }}"> {{ taken }} </a></h3>		
+						<h3 class="results-title">
+							<a href="{{ url_for('course_details', id= row['course_id'][loop.index] ) }}"> {{ taken }} </a>
+						</h3>		
 					{% endfor %}
 				
 				</div>
