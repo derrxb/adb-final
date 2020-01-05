@@ -1,4 +1,5 @@
 from scripts.app_helpers import get_db, close_db
+from datetime import date
 
 
 class User:
@@ -27,52 +28,138 @@ class User:
         close_db()
 
         return user.value()[0]
-    
+
     def check_password(self, username, password):
         db = get_db()
-        
-        query = db.run(f'MATCH (u:User) WHERE u.username="{username}" AND u.password="{password}" RETURN COUNT(u)').records()
-        
+        query = db.run(
+            f'MATCH (u:User) WHERE u.username="{username}" AND u.password="{password}" RETURN COUNT(u)').records()
+
         for item in query:
-        
+
             if item[0] == 1:
                 result = True
             else:
                 result = False
-            
+
         close_db()
-        
+
         return result
-    
+
     def find_history(self, username, page=0, page_size=20):
         db = get_db()
-        
+
         query = db.run(f'MATCH (a:Author)-[:TEACHES]->(c:Course)<-[e:ENROLLED]-(u:User),\
-            (c:Course)-[:RELATED_TO]->(k:Knowledge),\
-            (c:Course)-[:CONDUCTED_IN]->(l:Language),\
-            (c:Course)-[:PROVIDED_BY]->(p:Provider)\
-            WHERE u.username = "{username}"\
-            RETURN c.course_id, c.description, c.title, c.photo_link, c.direct_link,\
-            collect(DISTINCT a.author) as authors, collect(DISTINCT k.knowledge) as tags,\
-            l.language, p.provider, e.enrollment_date, e.completion_date, e.status SKIP {page} LIMIT {page_size}')
-        
+              (c:Course)-[:RELATED_TO]->(k:Knowledge),\
+              (c:Course)-[:CONDUCTED_IN]->(l:Language),\
+              (c:Course)-[:PROVIDED_BY]->(p:Provider)\
+              WHERE u.username = "{username}"\
+              RETURN c.course_id, c.description, c.title, c.photo_link, c.direct_link,\
+              collect(DISTINCT a.author) as authors, collect(DISTINCT k.knowledge) as tags,\
+              l.language, p.provider, e.enrollment_date, e.completion_date, e.status SKIP {page} LIMIT {page_size}')
+
         result_array = []
         for item in query:
             result_array += [{
-                    "course_id": item[0],
-                    "description": item[1],
-                    "title": item[2],
-                    "photo_link": item[3],
-                    "direct_link": item[4],
-                    "authors": item[5],
-                    "tags": item[6],
-                    "language": item[7],
-                    "provider": item[8],
-                    "enrollment_date": item[9],
-                    "completion_date": item[10],
-                    "status": item[11]
-                }]
-        
+                "course_id": item[0],
+                "description": item[1],
+                "title": item[2],
+                "photo_link": item[3],
+                "direct_link": item[4],
+                "authors": item[5],
+                "tags": item[6],
+                "language": item[7],
+                "provider": item[8],
+                "enrollment_date": item[9],
+                "completion_date": item[10],
+                "status": item[11]
+            }]
+
+        close_db()
+
+        return result_array
+
+    def enroll_in_course(self, username, course_id):
+        db = get_db()
+
+        enrollment = {
+            'enrollment_date': date.today(),
+            'status': 'IN_PROGRESS',
+        }
+
+        query = '''MATCH (c:Course), (u:User)
+                WHERE c.course_id = $course_id AND u.username = $username
+                CREATE (u)-[r:ENROLLED $enrollment]->(c)
+                RETURN type(r)'''
+
+        result = db.run(query, course_id=course_id,
+                        username=username, enrollment=enrollment)
+
+        return True
+
+    def enrolled_in(self, username, course_id):
+        """Determines if a user is enrolled in a course already"""
+        db = get_db()
+
+        query = '''MATCH (u:User)-[r:ENROLLED]->(c:Course)
+                   WHERE c.course_id = $course_id AND u.username = $username
+                   RETURN r'''
+
+        result = db.run(query, course_id=course_id,
+                        username=username).single()
+
+        return True if result != None and len(result) > 0 else False
+
+    def requires_prerequisite(self, username, course_id):
+        """Returns boolean indicating if the user needs a prerequisite for this course"""
+
+        db = get_db()
+
+        query = '''MATCH (c:Course)-[r:REQUIRES]->(c2:Course)<-[r2:ENROLLED]-(u:User)
+                   WHERE u.username = $username AND r2.status = 'COMPLETED'
+                   RETURN c
+                   '''
+
+        result = db.run(query, course_id=course_id,
+                        username=username).single()
+
+        return True if result == None else False
+
+    def find_all(self, page=0, page_size=20):
+        db = get_db()
+
+        courses = db.run(
+            f"MATCH (u:User)-[e:ENROLLED]->(c:Course)\
+            RETURN u.name, collect(DISTINCT c.title) as Courses SKIP {page} LIMIT {page_size}"
+        ).records()
+
+        result_array = []
+        for item in courses:
+            result_array += [{
+                "user": item[0],
+                "courses_taken": item[1]
+            }]
+
+        close_db()
+
+        return result_array
+
+    def find(self, query='', page=0, page_size=20):
+        db = get_db()
+        # Problem: search using author, results in author column only output 1 author (keyword)
+        # and not multiple, if there are any.
+        courses = db.run(
+            f'MATCH (u:User)-[e:ENROLLED]->(c:Course) WHERE (u.name =~ ".*(?i){query}.*")\
+            RETURN u.name, collect(DISTINCT c.title) as Courses SKIP {page} LIMIT {page_size}'
+        ).records()
+
+        result_array = []
+        for item in courses:
+            result_array += [{
+                "user": item[0],
+                "courses_taken": '; '.join(item[1])
+            }]
+
+        print(result_array)
         close_db()
 
         return result_array

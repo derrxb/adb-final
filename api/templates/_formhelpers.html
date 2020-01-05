@@ -11,6 +11,17 @@
 
 {% macro login_status(login) %}
 	{% if login %}
+		<a href = "/history">
+		<button type="button" class="btn btn-primary">
+				History
+		</button>
+		</a>
+		
+		<a href = "{{url_for('logout')}}">
+		<button type="button" class="btn btn-primary">
+				Log out
+		</button>
+		</a>
 		{% with messages = get_flashed_messages() %}
 			{% if messages %}
 				{% for message in messages %}
@@ -18,11 +29,7 @@
 				{% endfor %}
 			{% endif %}
 		{% endwith %}
-		<a href = "{{url_for('logout')}}">
-		<button type="button" class="btn btn-primary">
-				Log out
-		</button>
-		</a>
+		
 	{% else %}
 		<a href = "{{url_for('login')}}">
 		<button type="button" class="btn btn-primary">

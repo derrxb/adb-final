@@ -5,11 +5,12 @@ from flask_cors import CORS
 from .resources.Author import AuthorResource
 from .resources.Authors import AuthorsResource
 from .resources.Courses import CoursesResource
+from .resources.Enroll import EnrollResource
 from api import app
 from py2neo import ogm
 from flask2neo4j import Flask2Neo4J
-from .resources.forms import CourseSearchForm
-from .resources.tables import Results, History
+from .resources.forms import CourseSearchForm, SearchForm
+from .resources.tables import Results, History, UserResults
 #import flask_login
 
 from api.models.course import Course
@@ -22,6 +23,7 @@ api = Api(api_bp)
 
 api.add_resource(AuthorsResource, '/authors')
 api.add_resource(AuthorResource, '/authors/<int:id>')
+api.add_resource(EnrollResource, '/enroll')
 # api.add_resource(CoursesResource, '/courses')
 app.register_blueprint(api_bp)
 
@@ -88,7 +90,10 @@ def course_details(id):
 
     course = Course().find_by_id(id)
 
-    return render_template('course.html', form=search, course=course)
+    enrolled = User().enrolled_in(
+        session['username'], id) if 'username' in session else False
+
+    return render_template('course.html', form=search, course=course, enrolled=enrolled)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -135,7 +140,44 @@ def history():
 #    if session['username'] == None:
 #        error = 'Not logged in'
 #    return render_template('login.html', error=error)
+        
+@app.route('/user-search', methods=['GET','POST'])
+def user():
+    if 'username' in session:
+        flash('Logged in as %s' % escape(session['username']))
+        login = True
+    else:
+        login = False
+    search = SearchForm(request.form)
+    if request.method == 'POST':
+        return user_search_results(search)
+    return render_template('user-search.html', form=search, login=login)
 
+#@app.route('/results')
+def user_search_results(search):
+    results = []
+#    search_dim = search.data['select']
+    search_string = search.data['search']
+ 
+    if search_string == '':
+        results = User().find_all(page_number(), page_size())
+        table = UserResults(results)
+        table.border = True
+        return render_template('user-results.html', table=table, results=results, form=search)
+    else:
+        # display results
+        results = User().find(search_string, page_number(), page_size())
+        if not results:
+            flash(search_string)
+            return render_template('notfound.html')
+        table = UserResults(results)
+        table.border = True
+        return render_template('user-results.html', table=table, results=results, form=search)
+
+    search = SearchForm(request.form)
+    if request.method == 'POST':
+        return user_search_results(search)
+    return render_template('user-search.html', form=search)
 
 print(app.url_map)
 

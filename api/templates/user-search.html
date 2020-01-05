@@ -15,7 +15,6 @@
 <header class = "header-global">
 <div role="navigation" class="navbar navbar-static-top">
     <div class="container">
-            <div class="col-md-8">
                 <div class="logo-well">
                     <a href="/">
                     <img src="static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
@@ -27,22 +26,17 @@
                     </button>
                     </a>
 					
-					<a href = "/user-search">
+					<a href = "/">
 					<button type="button" class="btn btn-primary">
-                            Search for Users
+                            Search for Courses
                     </button>
                     </a>
 					
-                  
+                    {% from "_formhelpers.html" import login_status %}
+					{{ login_status(login) }}
 					
 					
-                </div>   
-            </div>
-
-            <div class="col-md-4 text-right">
-                  {% from "_formhelpers.html" import login_status %}
-                  {{ login_status(login) }}
-            </div> 
+                </div>    
     </div>
 </div>
 
@@ -50,7 +44,7 @@
     <div class= "container">
         <div class = "row justify-content=center"> 
             <div class="col-12 text-md-center">
-                <h1 style ="text-align: center"> Welcome! Search for a Course: </h1>
+                <h1 style ="text-align: center"> Welcome! Search for a User: </h1>
             </div>
         </div>
     </div>
@@ -67,7 +61,7 @@
                                     </div>
 										{% from "_formhelpers.html" import render_field %}
                                          <!--<input type="text" placeholder="Search for Course" class="form-control home-search" name="search" index="-1">-->
-										{{ render_field(form.search, placeholder="Search for Course", class="form-control home-search", index="-1") }}
+										{{ render_field(form.search, placeholder="Search for User", class="form-control home-search", index="-1") }}
                                         <button class="btn btn-primary home-search-btn" type="submit">Search</button>
                                 </div>
 

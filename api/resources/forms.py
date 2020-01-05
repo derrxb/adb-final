@@ -6,3 +6,6 @@ class CourseSearchForm(Form):
                ('Language', 'Language')]
     select = SelectField('Search for courses:', choices=choices)
     search = StringField('')
+    
+class SearchForm(Form):
+    search = StringField('')
