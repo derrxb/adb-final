@@ -91,6 +91,7 @@ def course_details(id):
         session['username'], id) if 'username' in session else False
 
     prerequisites = Course().get_prerequisites(id)
+    weekSections = Course().get_weekSections(id)
     last_prereq_id = prerequisites[len(
         prerequisites) - 1]['course_id'] if len(prerequisites) > 1 else []
 
@@ -99,7 +100,8 @@ def course_details(id):
                            course=course,
                            enrolled=enrolled,
                            prerequisites=prerequisites,
-                           last_prereq_id=last_prereq_id)
+                           last_prereq_id=last_prereq_id,
+                           weekSections=weekSections)
 
 
 @app.route('/login', methods=['GET', 'POST'])
