@@ -27,3 +27,7 @@ class History(Table):
     enrollment_date = Col('Enrollment Date')
     completion_date = Col('Completion Date')
     status = Col('Status')
+    
+class UserResults(Table):
+    user = Col('User')
+    courses_taken = Col('Courses Taken')

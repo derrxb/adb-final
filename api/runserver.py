@@ -8,8 +8,8 @@ from .resources.Courses import CoursesResource
 from api import app
 from py2neo import ogm
 from flask2neo4j import Flask2Neo4J
-from .resources.forms import CourseSearchForm
-from .resources.tables import Results, History
+from .resources.forms import CourseSearchForm, SearchForm
+from .resources.tables import Results, History, UserResults
 #import flask_login
 
 from api.models.course import Course
@@ -129,7 +129,44 @@ def history():
 #    if session['username'] == None:
 #        error = 'Not logged in'
 #    return render_template('login.html', error=error)
+        
+@app.route('/user-search', methods=['GET','POST'])
+def user():
+    if 'username' in session:
+        flash('Logged in as %s' % escape(session['username']))
+        login = True
+    else:
+        login = False
+    search = SearchForm(request.form)
+    if request.method == 'POST':
+        return user_search_results(search)
+    return render_template('user-search.html', form=search, login=login)
 
+#@app.route('/results')
+def user_search_results(search):
+    results = []
+#    search_dim = search.data['select']
+    search_string = search.data['search']
+ 
+    if search_string == '':
+        results = User().find_all(page_number(), page_size())
+        table = UserResults(results)
+        table.border = True
+        return render_template('user-results.html', table=table, results=results, form=search)
+    else:
+        # display results
+        results = User().find(search_string, page_number(), page_size())
+        if not results:
+            flash(search_string)
+            return render_template('notfound.html')
+        table = UserResults(results)
+        table.border = True
+        return render_template('user-results.html', table=table, results=results, form=search)
+
+    search = SearchForm(request.form)
+    if request.method == 'POST':
+        return user_search_results(search)
+    return render_template('user-search.html', form=search)
 
 print(app.url_map)
 
