@@ -61,6 +61,12 @@ body {
 	max-height: 250px;
 }
 
+/* LOGIN */
+.login-form {
+	padding-right: 30%;
+    padding-left: 30%;
+}
+
 /* EXPLORE */
 
 #popoto-graph:fullscreen {

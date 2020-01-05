@@ -117,12 +117,18 @@ def history():
     # Use James510 as username for "good" results
     error = None
     try:
+        if 'username' in session:
+            flash('Logged in as %s' % escape(session['username']))
+            login = True
+        else:
+            login = False
+
         if session['username']:
             results = User().find_history(
                 session['username'], page_number(), page_size())
             table = History(results)
             table.border = True
-            return render_template('history.html', error=error, table=table)
+            return render_template('history.html', error=error, table=table, login=login)
     except:
         error = 'Not logged in'
         return render_template('history.html', error=error)
