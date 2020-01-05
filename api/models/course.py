@@ -39,11 +39,10 @@ class Course:
         db = get_db()
 
         courses = db.run(
-            f'MATCH (c:Course) WHERE (c.title =~".*(?i){query}.*")\
-              WITH c MATCH (a:Author)-[:TEACHES]->(c), \
+            f'MATCH (c:Course), (a:Author) WHERE (c.title =~".*(?i){query}.*" OR a.author =~".*(?i){query}.*")\
+              WITH c, a MATCH (a)-[:TEACHES]->(c), \
               (c)-[:CONDUCTED_IN]->(l:Language), (c)-[:PROVIDED_BY]->(p:Provider) \
               OPTIONAL MATCH (c)-[:RELATED_TO]->(k:Knowledge) \
-              WHERE (a.author =~ ".*(?i){query}.*" OR k.knowledge =~ ".*(?i){query}.*") \
               RETURN c.course_id, c.description, c.title, c.photo_link, c.direct_link, \
               collect(DISTINCT a.author) as authors, collect(DISTINCT k.knowledge) as tags, \
               l.language, p.provider SKIP {page} LIMIT {page_size}'
