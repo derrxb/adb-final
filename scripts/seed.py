@@ -1,4 +1,5 @@
 import json
+import os
 from neo4j import GraphDatabase, basic_auth
 from courses import add_course, create_course_levels
 from languages import add_language
@@ -18,8 +19,24 @@ from users import create_users
 
 file = open('data/adb_courses.json', "rb", buffering=0)
 data = json.load(file)
-driver = GraphDatabase.driver('bolt://localhost:7687',
-                              auth=basic_auth('neo4j',  'password'))
+
+
+# Publish in heroku
+graphenedb_url = os.environ.get("GRAPHENEDB_BOLT_URL")
+graphenedb_user = os.environ.get("GRAPHENEDB_BOLT_USER")
+graphenedb_pass = os.environ.get("GRAPHENEDB_BOLT_PASSWORD")
+
+# for running in local computer
+if not graphenedb_url or graphenedb_url == '':
+    graphenedb_url = 'bolt://localhost:7687'
+if not graphenedb_user or graphenedb_user == '':
+    graphenedb_user = 'neo4j'
+if not graphenedb_pass or graphenedb_pass == '':
+    graphenedb_pass = 'password'
+
+# Link the app to the Flask database
+driver = GraphDatabase.driver(
+    graphenedb_url, auth=basic_auth(graphenedb_user, graphenedb_pass))
 
 
 def seed_data(driver):
