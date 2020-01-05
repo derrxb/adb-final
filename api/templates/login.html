@@ -21,6 +21,7 @@
 <header>
   <div role="navigation" class="navbar navbar-static-top navbar-light bg-light">
     <div class="container">
+            <div class="col-md-8">
                 <div class="logo-well">
                     <a href="/">
                     <img src="static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
@@ -32,17 +33,22 @@
                     </button>
                     </a>
           
-          <a href = "/history">
+          <a href = "/user-search">
           <button type="button" class="btn btn-primary">
-                            History
+                            Search for Users
                     </button>
                     </a>
           
-                    {% from "_formhelpers.html" import login_status %}
-          {{ login_status(login) }}
+                  
           
           
-                </div>    
+                </div>   
+            </div>
+
+            <div class="col-md-4 text-right">
+                  {% from "_formhelpers.html" import login_status %}
+                  {{ login_status(login) }}
+            </div> 
     </div>
 </div>
 

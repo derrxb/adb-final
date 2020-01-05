@@ -28,20 +28,12 @@
                     </a>
 
                     <a href = "/explore">
-					<button type="button" class="btn btn-primary">
-                            EXPLORE
-                    </button>
+					           <button type="button" class="btn btn-primary"> EXPLORE </button>
                     </a>
-					
-					<a href = "/history">
-					<button type="button" class="btn btn-primary">
-                            History
-                    </button>
+
+                    <a href = "/user-search">
+                      <button type="button" class="btn btn-primary"> Search for Users </button>
                     </a>
-					
-                  
-					
-					
                 </div>   
             </div>
 
@@ -53,7 +45,45 @@
 
 </header>
 
-	{{ table }}
+  <section>
+    <div class="container">
+      
+      <h1>History</h1>
+
+      {% for row in results %}
+        
+      <div class="row results-row">
+        <div class="col-md-4 results-container">
+          <img class="img-fluid results-image" src="{{ row['photo_link'] }}">
+        </div>
+
+        <div class="col-md-8">
+          
+          <h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}">{{ row['title']}}</a></h1>
+          <h5> {{ row['authors'] }} | {{ row['provider'] }} | {{ row['language']  }} </h5>
+          {% if row['status'] == "IN PROGRESS" %}
+            <h1 class= "history-badge badge badge-success"> {{ row['status'] }} </h1>
+          {% else %}
+            <h1 class= "history-badge badge badge-warning"> {{ row['status'] }} </h1>
+          {% endif %}
+          <h5> Enrolled: {{ row['enrollment_date'] }} | Completed: {{ row['completion_date'] }} </h5> 
+          <br/>
+          <a href= "{{ row['direct_link'] }}"> Direct Link to Course </a>
+          <br>
+          <p> {{ row['description'] }} </p>
+          
+        </div>
+
+      </div>
+
+        
+
+      {% endfor %}
+
+    </div>
+  </section>
+
+
 {% endif %}
 {% endblock %}
 
