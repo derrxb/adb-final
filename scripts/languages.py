@@ -10,7 +10,6 @@ data = json.load(file)
 driver = GraphDatabase.driver('bolt://localhost:7687',
                               auth=basic_auth('neo4j',  'password'))
 
-
 def add_language(driver):
     """Add the languages to the database"""
     # Create session
@@ -19,16 +18,15 @@ def add_language(driver):
     # Get unique languages
     languages = list(set(data['Language'].values()))
 
-    print(languages)
-
     # Create language nodes
     for language in languages:
         session.run(
             'CREATE (l:Language {language: $language }) RETURN l', language=language)
 
     session.close()
+    print('Languages added')
 
     return languages
 
-
-# print('Current languages: ', add_language(driver))
+if __name__ == '__main__':
+    print('Current languages: ', add_language(driver))

@@ -20,5 +20,5 @@ def add_course_lang(driver):
         result = session.run(
             'MATCH (c:Course), (l:Language) WHERE c.course_id = $course_id AND l.language = $course_language CREATE (c)-[r:CONDUCTED_IN]->(l) RETURN type(r)', course_id=course_id, course_language=course_language)
 
-
-add_course_lang(driver)
+if __name__ == '__main__':
+    add_course_lang(driver)

@@ -35,5 +35,5 @@ def add_course_weeks_section(driver):
 
     print('Linked Course and Week Section Data')
 
-
-add_course_weeks_section(driver)
+if __name__ == '__main__':
+    add_course_weeks_section(driver)

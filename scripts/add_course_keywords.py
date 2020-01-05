@@ -23,4 +23,5 @@ def add_course_keywords(driver):
 	session.close()	
 	return "Keyword-Course Relationships created."
 
-print(add_course_keywords(driver))
+if __name__ == '__main__':
+    print(add_course_keywords(driver))

@@ -44,4 +44,5 @@ def add_author(driver):
     
     return len(allauthors)
 
-print("Authors added",add_author(driver))
+if __name__ == '__main__':
+    print("Authors added",add_author(driver))

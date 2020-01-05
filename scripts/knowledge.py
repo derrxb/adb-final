@@ -37,5 +37,5 @@ def add_knowledge(driver):
 
     return len(tags)
 
-
-print("Knowledge added:", add_knowledge(driver))
+if __name__ == '__main__':
+    print("Knowledge added:", add_knowledge(driver))
