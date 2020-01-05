@@ -31,3 +31,4 @@ class History(Table):
 class UserResults(Table):
     user = Col('User')
     courses_taken = Col('Courses Taken')
+    course_id = Col('Course Id')
