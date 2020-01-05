@@ -30,11 +30,11 @@ def seed_user_history(driver):
     users = format_cypher_list(db.run('MATCH (n:User) RETURN n'))
     # Load tags with more than one relationships
     tags = format_cypher_list(
-        db.run('MATCH p=()-[r:RELATED_TO]->(n) WITH n, count(r) as rel_count WHERE rel_count > 2 RETURN n'))
+        db.run('MATCH p=()-[r:RELATED_TO]->(n) WITH n, count(r) as rel_count WHERE rel_count > 2 RETURN DISTINCT n'))
 
     for user in users:
         # Choose a random tag
-        random_tag = tags[randint(0, len(tags))]['knowledge']
+        random_tag = tags[randint(0, len(tags)) - 1]['knowledge']
 
         # Choose all the courses related to a tag
         courses = format_cypher_list(
