@@ -5,6 +5,7 @@ from flask_cors import CORS
 from .resources.Author import AuthorResource
 from .resources.Authors import AuthorsResource
 from .resources.Courses import CoursesResource
+from .resources.Enroll import EnrollResource
 from api import app
 from py2neo import ogm
 from flask2neo4j import Flask2Neo4J
@@ -22,6 +23,7 @@ api = Api(api_bp)
 
 api.add_resource(AuthorsResource, '/authors')
 api.add_resource(AuthorResource, '/authors/<int:id>')
+api.add_resource(EnrollResource, '/enroll')
 # api.add_resource(CoursesResource, '/courses')
 app.register_blueprint(api_bp)
 
@@ -88,7 +90,10 @@ def course_details(id):
 
     course = Course().find_by_id(id)
 
-    return render_template('course.html', form=search, course=course)
+    enrolled = User().enrolled_in(
+        session['username'], id) if 'username' in session else False
+
+    return render_template('course.html', form=search, course=course, enrolled=enrolled)
 
 
 @app.route('/login', methods=['GET', 'POST'])

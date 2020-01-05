@@ -24,7 +24,7 @@
 						</a>
 
 						<a href="/explore">
-							<button type="button" class="btn btn-primary"> EXPLORE </button>
+							<button type="button" class="btn btn-primary" onclick="enroll()"> EXPLORE </button>
 						</a>
 
 					</div>
@@ -55,8 +55,21 @@
 
 	<div class="hero-wrapper">
 		<div class="container hero-details">
-				<h1 class="course-title">{{ course['title'] }}</h1>
-				<h4 class="course-title-sub"> {{ course['authors'] }} | {{ course['provider'] }} | {{ course['language']  }} </h4>
+			<h1 class="course-title">{{ course['title'] }}</h1>
+			<h4 class="course-title-sub"> {{ course['authors'] }} | {{ course['provider'] }} | {{ course['language']  }} </h4>
+
+			{% if 'username' in session %}
+				<div>
+					<button id="enroll-in-course"
+									data-course-id="{{ course['course_id']}}"
+									data-username="{{ session['username']}}"
+									type="button"
+									class="btn {{ 'btn-success btn-lg' if enrolled == True else 'btn-light btn-lg'}}">
+						{{ 'Enrolled' if enrolled == True else 'Enroll In Course' }}
+
+					</button>
+				</div>
+				{% endif %}
 		</div>
 	</div>
 
@@ -72,7 +85,7 @@
 
 			<div class="tag-container">
 				{% for tag in course['tags'].split(', ') %}
-					<div class="tag">{{ tag }}</div>
+				<div class="tag">{{ tag }}</div>
 				{% endfor %}
 			</div>
 		</div>
@@ -92,9 +105,24 @@
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
 		integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous">
 	</script>
-
 	<script src="https://kit.fontawesome.com/7509859ed7.js" crossorigin="anonymous"></script>
-
+	<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </body>
+
+<script>
+	username = document.getElementById('enroll-in-course').getAttribute('data-username')
+	course_id = document.getElementById('enroll-in-course').getAttribute('data-course-id')
+
+
+	document.getElementById('enroll-in-course').addEventListener('click', function () {
+		axios.post(`/enroll?username=${username}&course_id=${course_id}`).then(function (response) {
+			document.getElementById('enroll-in-course').innerHTML = 'Enrolled'
+			document.getElementById("enroll-in-course").className = "btn btn-success btn-lg";
+			alert('You have been enrolled in this course! 😊')
+		}).catch(function (error) {
+			alert(error.response.data.error)
+		})
+	});
+</script>
 
 </html>
