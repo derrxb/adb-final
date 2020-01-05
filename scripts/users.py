@@ -41,7 +41,7 @@ universities = ['NTHU', 'NCTU', 'NTU', 'NCCU', 'Stanford', 'Galen']
 def create_users(driver):
     db = driver.session()
 
-    for _ in range(150):
+    for _ in range(250):
         name = fake.name()
         age = randint(15, 55)
         id = str(uuid.uuid4())

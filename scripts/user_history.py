@@ -25,7 +25,7 @@ def enroll_user_in_course(user, course_id, enrollment, session):
                          user_id=user['id'], enrollment=enrollment)
 
 
-def add_enrollment_info(courses):
+def add_enrollment_info(courses, completed=True):
     num_of_course = len(courses)
     enrollment = {}
     current_date = date.today()
@@ -34,13 +34,13 @@ def add_enrollment_info(courses):
     for course in courses:
         enrollment[course['course_id']] = {
             'enrollment_date': str(current_date - course_start),
-            'completion_date': str(current_date),
-            'status': 'COMPLETED'
+            'completion_date': str(current_date) if completed else None,
+            'status': 'COMPLETED' if completed else 'PENDING'
         }
 
         current_date = current_date - course_start
 
-    return courses, enrollment
+    return enrollment
 
 
 def seed_user_history(driver):
@@ -51,6 +51,7 @@ def seed_user_history(driver):
     # Load tags with more than one relationships
     tags = format_cypher_list(
         db.run('MATCH p=()-[r:RELATED_TO]->(n) WITH n, count(r) as rel_count WHERE rel_count > 2 RETURN DISTINCT n'))
+    all_courses = format_cypher_list(db.run("MATCH (c:Course) RETURN c"))
 
     for user in users:
         # Choose a random tag
@@ -61,11 +62,24 @@ def seed_user_history(driver):
             db.run("MATCH (c:Course)-[r:RELATED_TO]->(k:Knowledge) WHERE k.knowledge = $random_tag RETURN DISTINCT c",
                    random_tag=random_tag))
 
-        courses, enrollment = add_enrollment_info(courses)
+        enrollment = add_enrollment_info(courses)
 
         # Enroll users
         for course in courses:
             enroll_user_in_course(
                 user, course['course_id'], enrollment[course['course_id']], db)
+
+        # Give users a random course that is unfinished.
+        random_course = [all_courses[randint(0, len(all_courses) - 1)]]
+
+        if random_course not in courses:
+            random_course_enrollment = add_enrollment_info(
+                random_course, completed=False)
+
+            enroll_user_in_course(user,
+                                  random_course[0]['course_id'],
+                                  random_course_enrollment[random_course[0]
+                                                           ['course_id']],
+                                  db)
 
     db.close()
