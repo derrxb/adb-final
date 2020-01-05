@@ -20,23 +20,25 @@ api = Api(api_bp)
 
 api.add_resource(AuthorsResource, '/authors')
 api.add_resource(AuthorResource, '/authors/<int:id>')
-api.add_resource(CoursesResource, '/courses')
+# api.add_resource(CoursesResource, '/courses')
 app.register_blueprint(api_bp)
 
 # home
-@app.route('/', methods=['GET','POST'])
+@app.route('/', methods=['GET', 'POST'])
 def index():
     search = CourseSearchForm(request.form)
     if request.method == 'POST':
         return search_results(search)
     return render_template('index.html', form=search)
 
-#@app.route('/results')
+# @app.route('/results')
+
+
 def search_results(search):
     results = []
 #    search_dim = search.data['select']
     search_string = search.data['search']
- 
+
     if search_string == '':
         results = Course().find_all(page_number(), page_size())
         table = Results(results)
@@ -57,10 +59,19 @@ def search_results(search):
         return search_results(search)
     return render_template('index.html', form=search)
 
-# explore    
+# explore
 @app.route('/explore')
 def explore():
-	return render_template('explore.html')	
+    return render_template('explore.html')
+
+
+@app.route('/courses/<id>')
+def course_details(id):
+    search = CourseSearchForm(request.form)
+
+    course = Course().find_by_id(id)
+
+    return render_template('course.html', form=search, course=course)
 
 
 print(app.url_map)
