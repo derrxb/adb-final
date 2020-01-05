@@ -21,7 +21,7 @@
 				<div class="col-md-6">
 					<div class="logo-well">
 						<a href="/">
-							<img src="static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
+							<img src="/static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
 						</a>
 
 						<a href="/explore">
@@ -68,7 +68,7 @@
 				</div>
 
 				<div class="col-md-8">
-					<h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}"">{{ row['title']}}</a></h1>
+					<h1 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}">{{ row['title']}}</a></h1>
 					<h5> {{ row['authors'] }} | {{ row['provider'] }} | {{ row['language']  }} </h5>
 					<br>
 					<p> {{ row['description'] }} </p>

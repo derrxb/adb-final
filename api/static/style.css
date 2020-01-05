@@ -67,6 +67,11 @@ body {
 	padding-left: 30%;
 }
 
+/* HISTORY */
+.history-badge {
+	font-size: 100%;
+}
+
 /* EXPLORE */
 
 #popoto-graph:fullscreen {

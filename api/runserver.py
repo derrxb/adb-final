@@ -81,9 +81,13 @@ def explore():
     return render_template('explore.html')
 
 
-@app.route('/courses/<id>')
+@app.route('/courses/<id>', methods=['POST', 'GET'])
 def course_details(id):
     search = CourseSearchForm(request.form)
+    if request.method == 'POST':
+        return search_results(search)
+    #return render_template('index.html', form=search)
+
 
     course = Course().find_by_id(id)
 
@@ -91,9 +95,16 @@ def course_details(id):
         session['username'], id) if 'username' in session else False
 
     prerequisites = Course().get_prerequisites(id)
+
+    last_prereq_id = None
+    if len(prerequisites) > 1:
+        last_prereq_id = prerequisites[len(prerequisites) - 1]['course_id']
+    elif len(prerequisites) == 1:
+        last_prereq_id = prerequisites[0]['course_id']
+    else:
+        last_prereq_id = []
+
     weekSections = Course().get_weekSections(id)
-    last_prereq_id = prerequisites[len(
-        prerequisites) - 1]['course_id'] if len(prerequisites) > 1 else []
 
     return render_template('course.html',
                            form=search,
@@ -102,6 +113,9 @@ def course_details(id):
                            prerequisites=prerequisites,
                            last_prereq_id=last_prereq_id,
                            weekSections=weekSections)
+
+
+   
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -141,7 +155,7 @@ def history():
                 session['username'], page_number(), page_size())
             table = History(results)
             table.border = True
-            return render_template('history.html', error=error, table=table, login=login)
+            return render_template('history.html', error=error, table=table, results=results, login=login)
     except:
         error = 'Not logged in'
         return render_template('history.html', error=error)

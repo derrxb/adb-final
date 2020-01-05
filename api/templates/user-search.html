@@ -15,6 +15,7 @@
 <header class = "header-global">
 <div role="navigation" class="navbar navbar-static-top">
     <div class="container">
+        <div class="col-md-8">        
                 <div class="logo-well">
                     <a href="/">
                     <img src="static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
@@ -31,12 +32,13 @@
                             Search for Courses
                     </button>
                     </a>
-					
-                    {% from "_formhelpers.html" import login_status %}
-					{{ login_status(login) }}
-					
-					
-                </div>    
+                </div>
+        </div>
+
+        <div class="col-md-4 text-right">
+                  {% from "_formhelpers.html" import login_status %}
+                  {{ login_status(login) }}
+        </div>     
     </div>
 </div>
 

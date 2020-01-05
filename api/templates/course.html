@@ -31,7 +31,7 @@
 				</div>
 
 				<div class="col-md-6">
-					<form method=post role="search" id="search">
+					<form method="post" role="search" id="search">
 						<div class="form-group">
 							<div class="col-12">
 								<div class="form-group mb-lg-0">
@@ -96,7 +96,7 @@
 						{% for prereq in prerequisites %}
 							<div class="prerequisite">
 								<h1>
-									{{ prereq['title'] }}
+									<a href="{{ url_for('course_details', id=prereq['course_id']) }}">{{ prereq['title'] }}</a>
 								</h1>
 
 								<span>	{{ prereq['provider'] }} </span>
