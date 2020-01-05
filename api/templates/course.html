@@ -87,7 +87,6 @@
 				</div>
 			</div>
 		{% endif %}
-
 		{% if prerequisites %}
 			<section>
 				<div class="section">
@@ -112,6 +111,18 @@
 			</section>
 		</section>
 	{% endif %}
+	</section>
+	
+	<section>
+		{% for row in weekSections %}
+		<div class="row week-row">
+			<div class="col-md-8">
+				<h1 class="results-title">Week {{ row['week_num'] }}: {{ row['week_name'] }}</h1>
+				<p> {{ row['week_description'] }} </p>
+			</div>
+		</div>
+		{% endfor %}		
+	</section>
 
 	<footer id="sticky-footer" class="py-4 bg-light">
 		<div class="container text-center">

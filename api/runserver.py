@@ -100,12 +100,15 @@ def course_details(id):
     else:
         last_prereq_id = []
 
+    weekSections = Course().get_weekSections(id)
+
     return render_template('course.html',
                            form=search,
                            course=course,
                            enrolled=enrolled,
                            prerequisites=prerequisites,
-                           last_prereq_id=last_prereq_id)
+                           last_prereq_id=last_prereq_id,
+                           weekSections=weekSections)
 
 
 @app.route('/login', methods=['GET', 'POST'])
