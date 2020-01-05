@@ -119,22 +119,35 @@ class Course:
             }]
 
         return courses
-    
+
     def get_weekSections(self, course_id):
         db = get_db()
-        
+
         query = db.run('''
                 MATCH (w:weekSection) WHERE w.course_id= $course_id RETURN DISTINCT w.week_num, w.week_name, w.week_description ORDER BY w.week_num
                 ''', course_id=course_id).records()
-        
+
         result_array = []
         for item in query:
             result_array += [{
                 "week_num": item[0],
                 "week_title": item[1],
                 "week_description": item[2]
-                }]
-        
+            }]
+
         close_db()
-        
+
         return result_array
+
+    def get_enrolled_users(self, course_id):
+        db = get_db()
+
+        users = format_cypher_list(db.run('''
+            MATCH (u:User)-[r:ENROLLED]->(c:Course)
+            WHERE c.course_id = $course_id
+            RETURN u
+        ''', course_id=course_id))
+
+        close_db()
+
+        return users
