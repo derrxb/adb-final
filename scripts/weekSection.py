@@ -74,9 +74,9 @@ def add_weekSection(driver):
         session.run('CREATE (w:weekSection) SET w = {dict_param}', parameters={
                     'dict_param': dicts})
     session.close()
+    print('Weekly data addeed.')
 
     return weekList
 
-
-add_weekSection(driver)
-print('Weekly data addeed.')
+if __name__ == '__main__':
+    add_weekSection(driver)

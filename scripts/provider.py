@@ -28,5 +28,5 @@ def add_provider(driver):
 
     return providers
 
-
-# print('Current providers: ', add_provider(driver))
+if __name__ == '__main__':
+    print('Current providers: ', add_provider(driver))

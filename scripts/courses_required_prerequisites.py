@@ -89,5 +89,5 @@ def create_prerequisites_and_required(driver):
     for divider in part_identifier:
         create_relationships(divider, driver)
 
-
-create_prerequisites_and_required(driver)
+if __name__ == '__main__':
+    create_prerequisites_and_required(driver)

@@ -27,4 +27,5 @@ def add_course_authors(driver):
     session.close()
     return 'Author-Course Relationship created.'
         
-print(add_course_authors(driver))
+if __name__ == '__main__':
+    print(add_course_authors(driver))

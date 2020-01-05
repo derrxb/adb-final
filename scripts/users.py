@@ -54,5 +54,5 @@ def create_users(driver):
 
     db.close()
 
-
-create_users(driver)
+if __name__ == '__main__':
+    create_users(driver)
