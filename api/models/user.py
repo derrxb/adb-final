@@ -60,13 +60,12 @@ class User:
         db = get_db()
 
         query = db.run(f'MATCH (a:Author)-[:TEACHES]->(c:Course)<-[e:ENROLLED]-(u:User),\
-              (c:Course)-[:RELATED_TO]->(k:Knowledge),\
               (c:Course)-[:CONDUCTED_IN]->(l:Language),\
               (c:Course)-[:PROVIDED_BY]->(p:Provider)\
-              WHERE u.username = "{username}"\
+              WHERE (u.username = "{username}")\
               RETURN c.course_id, c.description, c.title, c.photo_link, c.direct_link,\
-              collect(DISTINCT a.author) as authors, collect(DISTINCT k.knowledge) as tags,\
-              l.language, p.provider, e.enrollment_date, e.completion_date, e.status SKIP {page} LIMIT {page_size}')
+                     collect(DISTINCT a.author) as authors , l.language, p.provider, \
+                     e.enrollment_date, e.completion_date, e.status SKIP {page} LIMIT {page_size}')
 
         result_array = []
         for item in query:
@@ -77,12 +76,11 @@ class User:
                 "photo_link": item[3],
                 "direct_link": item[4],
                 "authors": item[5],
-                "tags": item[6],
-                "language": item[7],
-                "provider": item[8],
-                "enrollment_date": item[9],
-                "completion_date": item[10],
-                "status": item[11]
+                "language": item[6],
+                "provider": item[7],
+                "enrollment_date": item[8],
+                "completion_date": item[9],
+                "status": item[10]
             }]
 
         close_db()
@@ -98,9 +96,9 @@ class User:
         }
 
         query = '''MATCH (c:Course), (u:User)
-                WHERE c.course_id = $course_id AND u.username = $username
-                CREATE (u)-[r:ENROLLED $enrollment]->(c)
-                RETURN type(r)'''
+                   WHERE c.course_id = $course_id AND u.username = $username
+                   CREATE(u)-[r:ENROLLED $enrollment] -> (c)
+                   RETURN type(r)'''
 
         result = db.run(query, course_id=course_id,
                         username=username, enrollment=enrollment)
@@ -113,7 +111,7 @@ class User:
 
         query = '''MATCH (u:User)-[r:ENROLLED]->(c:Course)
                    WHERE c.course_id = $course_id AND u.username = $username
-                   RETURN r'''
+            RETURN r'''
 
         result = db.run(query, course_id=course_id,
                         username=username).single()
@@ -126,8 +124,8 @@ class User:
         db = get_db()
 
         prerequisites = '''MATCH (c:Course)-[r:REQUIRES]->(c2:Course)
-                           WHERE c.course_id = $course_id
-                           RETURN c'''
+ WHERE c.course_id = $course_id
+            RETURN c'''
 
         prerequisites_results = db.run(
             prerequisites, course_id=course_id).single()
@@ -138,9 +136,9 @@ class User:
 
         # If it has prereq ensures they've taken them.
         query = '''MATCH (c:Course)-[r:REQUIRES]->(c2:Course)<-[r2:ENROLLED]-(u:User)
-                   WHERE u.username = $username AND r2.status = 'COMPLETED' AND c.course_id = $course_id
-                   RETURN c
-                   '''
+                   WHERE u.username = $username AND r2.status = 'COMPLETE D' AND c.course_id = $course_id
+            RETURN c
+           '''
 
         result = db.run(query, course_id=course_id,
                         username=username).single()
