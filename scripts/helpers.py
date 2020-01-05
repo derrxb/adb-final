@@ -20,3 +20,12 @@ def contains(text, array=[]):
             break
 
     return contains
+
+
+def format_node(node):
+    """Formats a Neo4j Node to JSON Object"""
+    temp = dict(node.items())
+    temp['node_type'] = node.id
+    temp['node_id'] = list(node.labels)[0]
+
+    return temp
