@@ -22,10 +22,10 @@ class EnrollResource(Resource):
 
         requires_prerequisite = User().requires_prerequisite(username, course_id)
 
+        print(requires_prerequisite)
+
         if requires_prerequisite == True:
             abort(403, error="This course has a prerequite that you haven't taken")
-
-        print(requires_prerequisite)
 
         results = User().enroll_in_course(username, course_id)
 

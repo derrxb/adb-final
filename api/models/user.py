@@ -114,8 +114,20 @@ class User:
 
         db = get_db()
 
+        prerequisites = '''MATCH (c:Course)-[r:REQUIRES]->(c2:Course)
+                           WHERE c.course_id = $course_id
+                           RETURN c'''
+
+        prerequisites_results = db.run(
+            prerequisites, course_id=course_id).single()
+
+        # If the course has no prereq allow the user to sign up
+        if prerequisites_results == None:
+            return False
+
+        # If it has prereq ensures they've taken them.
         query = '''MATCH (c:Course)-[r:REQUIRES]->(c2:Course)<-[r2:ENROLLED]-(u:User)
-                   WHERE u.username = $username AND r2.status = 'COMPLETED'
+                   WHERE u.username = $username AND r2.status = 'COMPLETED' AND c.course_id = $course_id
                    RETURN c
                    '''
 
