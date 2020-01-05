@@ -1,0 +1,9 @@
+<!doctype html>
+{% block body %}
+{% if error %}
+    <p class=error><strong>Error:</strong> {{ error }}
+{% else %}
+	<p> no problems
+	{{ table }}
+{% endif %}
+{% endblock %}
