@@ -123,3 +123,43 @@ class User:
                         username=username).single()
 
         return True if result == None else False
+
+    def find_all(self, page=0, page_size=20):
+        db = get_db()
+
+        courses = db.run(
+            f"MATCH (u:User)-[e:ENROLLED]->(c:Course)\
+            RETURN u.name, collect(DISTINCT c.title) as Courses SKIP {page} LIMIT {page_size}"
+        ).records()
+
+        result_array = []
+        for item in courses:
+            result_array += [{
+                "user": item[0],
+                "courses_taken": item[1]
+            }]
+
+        close_db()
+
+        return result_array
+
+    def find(self, query='', page=0, page_size=20):
+        db = get_db()
+        # Problem: search using author, results in author column only output 1 author (keyword)
+        # and not multiple, if there are any.
+        courses = db.run(
+            f'MATCH (u:User)-[e:ENROLLED]->(c:Course) WHERE (u.name =~ ".*(?i){query}.*")\
+            RETURN u.name, collect(DISTINCT c.title) as Courses SKIP {page} LIMIT {page_size}'
+        ).records()
+
+        result_array = []
+        for item in courses:
+            result_array += [{
+                "user": item[0],
+                "courses_taken": '; '.join(item[1])
+            }]
+
+        print(result_array)
+        close_db()
+
+        return result_array
