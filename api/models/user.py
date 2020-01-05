@@ -1,5 +1,6 @@
 from scripts.app_helpers import get_db, close_db
 from datetime import date
+from scripts.helpers import format_cypher_list
 
 
 class User:
@@ -28,6 +29,16 @@ class User:
         close_db()
 
         return user.value()[0]
+
+    def find_by_username(self, username):
+        db = get_db()
+
+        user = format_cypher_list(db.run('''MATCH (u:User) WHERE u.username = $username RETURN u''',
+                                         username=username))
+
+        close_db()
+
+        return user
 
     def check_password(self, username, password):
         db = get_db()

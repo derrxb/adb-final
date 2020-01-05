@@ -101,8 +101,7 @@ def course_details(id):
     search = CourseSearchForm(request.form)
     if request.method == 'POST':
         return search_results(search)
-    #return render_template('index.html', form=search)
-
+    # return render_template('index.html', form=search)
 
     course = Course().find_by_id(id)
 
@@ -120,6 +119,7 @@ def course_details(id):
         last_prereq_id = []
 
     weekSections = Course().get_weekSections(id)
+    enrolled_users = Course().get_enrolled_users(id)
 
     return render_template('course.html',
                            form=search,
@@ -128,9 +128,6 @@ def course_details(id):
                            prerequisites=prerequisites,
                            last_prereq_id=last_prereq_id,
                            weekSections=weekSections)
-
-
-   
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -156,27 +153,33 @@ def logout():
 
 @app.route('/history')
 def history():
+    username = None
+    public_user = request.args.get('username')
+
     # Use James510 as username for "good" results
     error = None
     try:
         if 'username' in session:
+            username = session['username']
+
             flash('Logged in as %s' % escape(session['username']))
             login = True
         else:
             login = False
 
-        if session['username']:
-            results = User().find_history(
-                session['username'], page_number(), page_size())
+        if public_user != None:
+            username = public_user
+
+        if username != None:
+            results = User().find_history(username, page_number(), page_size())
             table = History(results)
             table.border = True
-            return render_template('history.html', error=error, table=table, results=results, login=login)
-    except:
+            user = User().find_by_username(username)[0]
+            return render_template('history.html', error=error, table=table, results=results, login=login, user=user)
+    except Exception as e:
+        print(e)
         error = 'Not logged in'
         return render_template('history.html', error=error)
-#    if session['username'] == None:
-#        error = 'Not logged in'
-#    return render_template('login.html', error=error)
 
 
 @app.route('/user-search', methods=['GET', 'POST'])
@@ -218,6 +221,7 @@ def user_search_results(search):
 
 
 print(app.url_map)
+
 
 # Enable debugging mode for dev environments
 if __name__ == '__main__':
