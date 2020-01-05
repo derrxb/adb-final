@@ -38,7 +38,7 @@ def seed_user_history(driver):
 
         # Choose all the courses related to a tag
         courses = format_cypher_list(
-            db.run("MATCH (c:Course)-[r:RELATED_TO]->(k:Knowledge) WHERE k.knowledge = $random_tag RETURN c",
+            db.run("MATCH (c:Course)-[r:RELATED_TO]->(k:Knowledge) WHERE k.knowledge = $random_tag RETURN DISTINCT c",
                    random_tag=random_tag))
 
         # Enroll users
@@ -46,6 +46,3 @@ def seed_user_history(driver):
             enroll_user_in_course(user, course['course_id'], db)
 
     db.close()
-
-
-seed_user_history(driver)
