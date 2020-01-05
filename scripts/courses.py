@@ -58,24 +58,30 @@ def add_course_level(result, driver):
 
     title = course['title'].lower()
 
-    if contains(title, ['basic', 'essential', 'fundamental', 'introduction']):
+    basic_keywords = ['basic', 'essential', 'part i', 'learn to',
+                      'fundamental', 'introduction', 'beginners']
+    intermediate_keywords = ['intermediate', 'part 2',
+                             'part B', 'part 3', 'part C', 'part III']
+    advanced_keywords = ['advance', 'advanced', 'Part 4', 'Part D', 'Part IV']
+
+    if contains(title, basic_keywords):
         level = 'basic'
 
-    if contains(title, ['intermediate']):
+    if contains(title, intermediate_keywords):
         level = 'intermediate'
 
-    if contains(title, ['advanced']):
+    if contains(title, advanced_keywords):
         level = 'advanced'
 
     if course['description'] is not None and level == 'neutral':
         description = course['description'].lower()
 
-        if contains(description, ['basic', 'essential', 'fundamental', 'introduction']):
+        if contains(description, basic_keywords):
             if not contains(description, ['advanced']):
                 level = 'basic'
-            elif contains(description, ['intermediate']):
+            elif contains(description, intermediate_keywords):
                 level = 'intermediate'
-            elif contains(description, ['advanced']):
+            elif contains(description, advanced_keywords):
                 level = 'advanced'
 
     query = '''MATCH (source:Level), (target:Course)
