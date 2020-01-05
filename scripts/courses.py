@@ -50,6 +50,14 @@ def create_course_levels(driver):
     session.close()
 
 
+# Keywords to determine the difficulty of a course
+basic_keywords = ['basic', 'essential', 'part i', 'learn to',
+                  'fundamental', 'introduction', 'beginners']
+intermediate_keywords = ['intermediate', 'part 2',
+                         'part B', 'part 3', 'part C', 'part III']
+advanced_keywords = ['advance', 'advanced', 'Part 4', 'Part D', 'Part IV']
+
+
 def add_course_level(result, driver):
     """Links a course to a certain `difficulty` level"""
     session = driver.session()
@@ -57,12 +65,6 @@ def add_course_level(result, driver):
     level = 'neutral'
 
     title = course['title'].lower()
-
-    basic_keywords = ['basic', 'essential', 'part i', 'learn to',
-                      'fundamental', 'introduction', 'beginners']
-    intermediate_keywords = ['intermediate', 'part 2',
-                             'part B', 'part 3', 'part C', 'part III']
-    advanced_keywords = ['advance', 'advanced', 'Part 4', 'Part D', 'Part IV']
 
     if contains(title, basic_keywords):
         level = 'basic'

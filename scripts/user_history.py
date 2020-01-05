@@ -2,6 +2,7 @@ import json
 from neo4j import GraphDatabase, basic_auth
 from helpers import format_node, format_cypher_list
 from random import randint
+from datetime import date, timedelta
 
 
 # Load and parse data
@@ -14,13 +15,32 @@ driver = GraphDatabase.driver('bolt://localhost:7687',
                               auth=basic_auth('neo4j',  'password'))
 
 
-def enroll_user_in_course(user, course_id, session):
+def enroll_user_in_course(user, course_id, enrollment, session):
     query = '''MATCH (c:Course), (u:User)
                WHERE c.course_id = $course_id AND u.id = $user_id
-               CREATE (u)-[r:ENROLLED]->(c)
+               CREATE (u)-[r:ENROLLED $enrollment]->(c)
                RETURN type(r)'''
 
-    result = session.run(query, course_id=course_id, user_id=user['id'])
+    result = session.run(query, course_id=course_id,
+                         user_id=user['id'], enrollment=enrollment)
+
+
+def add_enrollment_info(courses):
+    num_of_course = len(courses)
+    enrollment = {}
+    current_date = date.today()
+    course_start = timedelta(days=20)
+
+    for course in courses:
+        enrollment[course['course_id']] = {
+            'enrollment_date': str(current_date - course_start),
+            'completion_date': str(current_date),
+            'status': 'COMPLETED'
+        }
+
+        current_date = current_date - course_start
+
+    return courses, enrollment
 
 
 def seed_user_history(driver):
@@ -41,8 +61,11 @@ def seed_user_history(driver):
             db.run("MATCH (c:Course)-[r:RELATED_TO]->(k:Knowledge) WHERE k.knowledge = $random_tag RETURN DISTINCT c",
                    random_tag=random_tag))
 
+        courses, enrollment = add_enrollment_info(courses)
+
         # Enroll users
         for course in courses:
-            enroll_user_in_course(user, course['course_id'], db)
+            enroll_user_in_course(
+                user, course['course_id'], enrollment[course['course_id']], db)
 
     db.close()
