@@ -3,7 +3,14 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
-    <title>Popoto Search</title>
+    <title>Explore</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static',filename='style.css') }}">
+
+
     <link rel="stylesheet" href="https://unpkg.com/popoto/dist/popoto.min.css">
 
     <style>
@@ -26,6 +33,28 @@
     </style>
 </head>
 <body class="ppt-body">
+
+	<header>
+  <div role="navigation" class="navbar navbar-static-top navbar-light bg-light">
+    <div class="container">
+            <div class="col-md-12">
+                <div class="logo-well">
+                    <a href="/">
+                    <img src="static/logo.png" alt="Neo4j World's Leading Graph Database" id="logo">
+                    </a>
+
+                    <a href = "/explore">
+          <button type="button" class="btn btn-primary">
+                            EXPLORE
+                    </button>
+                    </a>
+                </div>   
+            </div>
+
+    </div>
+</div>
+
+</header>
 
 <section class="ppt-section-main">
     <div class="ppt-section-header">
@@ -78,6 +107,8 @@
      *
      * For more information on Neo4J REST API the documentation is available here: http://neo4j.com/docs/stable/rest-api-cypher.html
      */
+    popoto.graph.USE_FIT_TEXT = true;
+
     popoto.rest.CYPHER_URL = "http://localhost:7474/db/data/transaction/commit";
     /**
      * Add this authorization property if your Neo4j server uses basic HTTP authentication.
@@ -102,12 +133,13 @@
     popoto.provider.node.Provider = {
         "Author": {
             "returnAttributes": ["author"],
-            "constraintAttribute": "author",
-            "autoExpandRelations": true // if set to true Person nodes will be automatically expanded in graph
+            "constraintAttribute": "author"
         },
         "Course": {
             "returnAttributes": ["course_id", "description", "photo_link", "title", "direct_link"],
-            "constraintAttribute": "course_id"
+            "constraintAttribute": "course_id",
+            "autoExpandRelations": false,
+            "displayAttribute": "title"
         },
         "Knowledge": {
             "returnAttributes": ["knowledge"],
@@ -117,17 +149,23 @@
             "returnAttributes": ["language"],
             "constraintAttribute": "language"
         },
+        "Level": {
+            "returnAttributes": ["name"],
+            "constraintAttribute": "name"
+        },
         "Provider": {
             "returnAttributes": ["provider"],
             "constraintAttribute": "provider"
         },
         "weekSection": {
             "returnAttributes": ["week_num", "course_id", "week_slug", "week_description", "week_id", "week_name", "week_timeCommitment"],
-            "constraintAttribute": "week_id"
+            "constraintAttribute": "week_id", 
+            "displayAttribute": "week_name"
         },
         "User": {
-            "returnAttributes": ["name", "id", "university", "age", "username"],
-            "constraintAttribute": "id"
+            "returnAttributes": ["name", "password", "id", "university", "age", "username"],
+            "constraintAttribute": "id",
+            "displayAttribute": "username"
         }
 
     };
@@ -159,5 +197,7 @@
      */
     popoto.start("Course");
 </script>
+
+
 </body>
 </html>
