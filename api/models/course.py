@@ -100,9 +100,22 @@ class Course:
     def get_prerequisites(self, course_id):
         db = get_db()
 
-        query = '''MATCH(c: Course)-[r:REQUIRES*1] -> (c2: Course)
-                   WHERE c.course_id= $course_id RETURN c2'''
+        query = '''MATCH(c: Course)-[r:REQUIRES*1..]->(c2: Course)<-[:PROVIDED_BY]->(p: Provider)
+                   WHERE c.course_id= $course_id
+                   RETURN c2.course_id, c2.description, c2.title, c2.photo_link, c2.direct_link,
+                          p.provider'''
 
-        courses = format_cypher_list(db.run(query, course_id=course_id))
+        results = db.run(query, course_id=course_id).records()
+
+        courses = []
+        for item in results:
+            courses += [{
+                "course_id": item[0],
+                "description": item[1],
+                "title": item[2],
+                "photo_link": item[3],
+                "direct_link": item[4],
+                "provider": item[5]
+            }]
 
         return courses

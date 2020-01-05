@@ -64,7 +64,7 @@ body {
 /* LOGIN */
 .login-form {
 	padding-right: 30%;
-    padding-left: 30%;
+	padding-left: 30%;
 }
 
 /* EXPLORE */
@@ -152,4 +152,37 @@ body {
 	min-width: fit-content;
 	margin-right: 0.5em;
 	margin-bottom: 0.5em;
+}
+
+.prerequisite-container {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.prerequisite {
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0px 1px 16px 0px rgba(0, 0, 0, 0.125);
+	border-radius: 7px;
+	padding: 1em;
+	margin-bottom: 1em;
+}
+
+.prerequisite>h1 {
+	font-size: 14px;
+	font-weight: 600;
+}
+
+.prerequisite>span {
+	font-size: 12px;
+}
+
+.prerequisite-container>img {
+	align-self: center;
+	margin-bottom: 1em;
+}
+
+.prereq-img {
+	color: red;
 }

@@ -91,8 +91,15 @@ def course_details(id):
         session['username'], id) if 'username' in session else False
 
     prerequisites = Course().get_prerequisites(id)
+    last_prereq_id = prerequisites[len(
+        prerequisites) - 1]['course_id'] if len(prerequisites) > 1 else []
 
-    return render_template('course.html', form=search, course=course, enrolled=enrolled)
+    return render_template('course.html',
+                           form=search,
+                           course=course,
+                           enrolled=enrolled,
+                           prerequisites=prerequisites,
+                           last_prereq_id=last_prereq_id)
 
 
 @app.route('/login', methods=['GET', 'POST'])
