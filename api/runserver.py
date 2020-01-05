@@ -23,6 +23,7 @@ api.add_resource(AuthorResource, '/authors/<int:id>')
 api.add_resource(CoursesResource, '/courses')
 app.register_blueprint(api_bp)
 
+# home
 @app.route('/', methods=['GET','POST'])
 def index():
     search = CourseSearchForm(request.form)
@@ -40,7 +41,7 @@ def search_results(search):
         results = Course().find_all(page_number(), page_size())
         table = Results(results)
         table.border = True
-        return render_template('results.html', table=table)
+        return render_template('results.html', table=table, results=results, form=search)
     else:
         # display results
         results = Course().find(search_string, page_number(), page_size())
@@ -49,9 +50,18 @@ def search_results(search):
             return render_template('notfound.html')
         table = Results(results)
         table.border = True
-        return render_template('results.html', table=table)
-    
-    
+        return render_template('results.html', table=table, results=results, form=search)
+
+    search = CourseSearchForm(request.form)
+    if request.method == 'POST':
+        return search_results(search)
+    return render_template('index.html', form=search)
+
+# explore    
+@app.route('/explore')
+def explore():
+	return render_template('explore.html')	
+
 
 print(app.url_map)
 

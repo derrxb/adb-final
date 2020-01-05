@@ -6,7 +6,7 @@
     <title>Popoto Search</title>
     <link rel="stylesheet" href="https://unpkg.com/popoto/dist/popoto.min.css">
 
-   <style>
+    <style>
         #popoto-graph:fullscreen {
             width: 100%;
             height: 100%;
@@ -27,10 +27,26 @@
 </head>
 <body class="ppt-body">
 
+<div class="navbar-fixed">
+    <nav style="background-color: #444951;">
+        <div class="nav-wrapper">
+            <form style="height:100%; margin-left: 8%; margin-right: 8%; background-color: #525863;"
+                  onsubmit="event.preventDefault(); return false;">
+                <div class="input-field">
+                    <input id="search" type="search" required>
+                    <label class="label-icon" for="search"><i
+                            class="ppt-icon ppt-icon-search-plus" style="color:#8bb71a;"></i></label>
+                </div>
+            </form>
+        </div>
+    </nav>
+</div>
 <section class="ppt-section-main">
     <div class="ppt-section-header">
         <span class="ppt-header-span">Graph</span> search
     </div>
+
+
 
     <div class="ppt-container-graph">
         <nav id="popoto-taxonomy" class="ppt-taxo-nav">
@@ -122,7 +138,12 @@
         "weekSection": {
             "returnAttributes": ["week_num", "course_id", "week_slug", "week_description", "week_id", "week_name", "week_timeCommitment"],
             "constraintAttribute": "week_id"
+        },
+        "User": {
+            "returnAttributes": ["name", "id", "university", "age", "username"],
+            "constraintAttribute": "id"
         }
+
     };
     /**
      * Here a listener is used to retrieve the total results count and update the page accordingly.
