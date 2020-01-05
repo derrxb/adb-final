@@ -52,18 +52,17 @@ def index():
 
     rand_ids = random.sample(range(1, 100), 4)
     # convert to string
-    str_rand_ids = " ".join(str(x) for x in rand_ids) 
+    str_rand_ids = " ".join(str(x) for x in rand_ids)
 
     featured = []
     for num in rand_ids:
         feat = Course().find_by_id(str(num))
         featured.append(feat)
-    
 
     return render_template('index.html', form=search, login=login, rand_ids=rand_ids, results=featured)
 
     # random courses everytime
-    
+
 
 # @app.route('/results')
 
@@ -127,7 +126,8 @@ def course_details(id):
                            enrolled=enrolled,
                            prerequisites=prerequisites,
                            last_prereq_id=last_prereq_id,
-                           weekSections=weekSections)
+                           weekSections=weekSections,
+                           users=enrolled_users)
 
 
 @app.route('/login', methods=['GET', 'POST'])

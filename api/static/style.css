@@ -45,8 +45,8 @@ body {
 
 .feat-image {
 	width: 250px;
-    height: 250px;
-    object-fit: cover;
+	height: 250px;
+	object-fit: cover;
 }
 
 /* results */
@@ -227,6 +227,7 @@ body {
 	color: red;
 }
 
+
 /* ERROR */ 
 .errorbg {
 	background: url("error.jpg") !important;
@@ -235,4 +236,14 @@ body {
 
 .jumbotron {
 	background: none;
+}
+
+.enrolled-user-details {
+	display: flex;
+	flex-direction: column;
+}
+
+.enrolled-user-details-badge {
+	font-weight: 500;
+	font-size: 14px;
 }
