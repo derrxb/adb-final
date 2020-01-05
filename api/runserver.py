@@ -1,4 +1,5 @@
 import os
+import random
 from flask import Flask, g, Blueprint, render_template, request, redirect, flash, url_for, escape, session
 from flask_restful import Api
 from flask_cors import CORS
@@ -48,7 +49,21 @@ def index():
     search = CourseSearchForm(request.form)
     if request.method == 'POST':
         return search_results(search)
-    return render_template('index.html', form=search, login=login)
+
+    rand_ids = random.sample(range(1, 100), 4)
+    # convert to string
+    str_rand_ids = " ".join(str(x) for x in rand_ids) 
+
+    featured = []
+    for num in rand_ids:
+        feat = Course().find_by_id(str(num))
+        featured.append(feat)
+    
+
+    return render_template('index.html', form=search, login=login, rand_ids=rand_ids, results=featured)
+
+    # random courses everytime
+    
 
 # @app.route('/results')
 

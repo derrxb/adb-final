@@ -85,9 +85,28 @@
 
 </section>
 
-<div>
-
 </header>
+
+<section class="container">
+    <div class = "container p-5">
+        <h1 class="text-center p-5 font-weight-bold"> Learn Something New </h1>
+        <div class = "row">
+            {% for row in results %}
+            <div class = "col-md-3 course-row">
+                <img class="img-fluid feat-image" src="{{ row['photo_link'] }}">
+                <h2 class="results-title"><a href="{{ url_for('course_details', id=row['course_id']) }}">{{ row['title']}}</a></h2>
+                    <h5> {{ row['authors'] }} | {{ row['provider'] }} | {{ row['language']  }} </h5>
+            </div>
+        
+        {% endfor %}
+    </div>
+</section>
+
+<footer id="sticky-footer" class="py-4 bg-light">
+        <div class="container text-center">
+            <small>Copyright &copy; awesomemoocs </small>
+        </div>
+</footer>
 
 
 <script type="text/javascript" src="//code.jquery.com/jquery-1.11.0.min.js"></script>
