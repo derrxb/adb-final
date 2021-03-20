@@ -16,7 +16,7 @@ Flask-WTF==0.14.2
 Flask2Neo4J==0.1a1
 gunicorn==20.0.4
 itsdangerous==1.1.0
-Jinja2==2.10.3
+Jinja2==2.11.3
 MarkupSafe==1.1.1
 neo4j==1.7.6
 neobolt==1.7.15
